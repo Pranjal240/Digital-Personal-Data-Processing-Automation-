@@ -7,6 +7,7 @@ import {
 
 interface CustomEdgeData {
   connectionType?: 'main' | 'ai_languageModel' | 'ai_tool' | 'ai_memory'
+  routeIndex?: number
   isHighlighted?: boolean
 }
 
@@ -24,6 +25,7 @@ export const CustomWorkflowEdge: React.FC<EdgeProps> = ({
 }) => {
   const edgeData = data as CustomEdgeData | undefined
   const connType = edgeData?.connectionType || 'main'
+  const routeIndex = edgeData?.routeIndex || 0
   const isHighlighted = edgeData?.isHighlighted || false
 
   const [edgePath] = getBezierPath({
@@ -35,8 +37,8 @@ export const CustomWorkflowEdge: React.FC<EdgeProps> = ({
     targetPosition,
   })
 
-  // Stroke color & styling by connection type
-  let strokeColor = '#6366f1' // indigo for main
+  // Stroke color & styling by connection type & route
+  let strokeColor = '#6366f1' // indigo for main success
   let strokeDasharray = undefined
   let strokeWidth = 2
 
@@ -52,11 +54,16 @@ export const CustomWorkflowEdge: React.FC<EdgeProps> = ({
     strokeColor = '#10b981' // emerald
     strokeDasharray = '4 4'
     strokeWidth = 1.75
+  } else if (connType === 'main' && routeIndex === 1) {
+    // Error fallback branch to FallBack agent
+    strokeColor = '#f59e0b' // amber fallback
+    strokeDasharray = '4 3'
+    strokeWidth = 1.75
   }
 
   if (isHighlighted) {
     strokeWidth = 3.5
-    strokeColor = '#ffffff'
+    strokeColor = '#38bdf8'
   }
 
   return (
@@ -70,11 +77,10 @@ export const CustomWorkflowEdge: React.FC<EdgeProps> = ({
           stroke: strokeColor,
           strokeWidth,
           strokeDasharray,
-          opacity: isHighlighted ? 1 : 0.75,
+          opacity: isHighlighted ? 1 : 0.85,
           transition: 'all 0.2s ease',
         }}
       />
     </>
   )
 }
-

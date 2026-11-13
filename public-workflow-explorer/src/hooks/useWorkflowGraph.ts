@@ -1,8 +1,15 @@
+/**
+ * DPDP AI Automation Workflow Explorer
+ * © 2026 Pranjal (Pranjal240). All rights reserved.
+ * Licensed under the MIT License.
+ */
+
 import { useState, useMemo, useCallback } from 'react'
 import {
   type Node,
   type Edge,
   MarkerType,
+  Position,
   type NodeChange,
 } from '@xyflow/react'
 import workflowDataRaw from '../data/workflow.json'
@@ -45,7 +52,16 @@ export function useWorkflowGraph() {
     return map
   }, [])
 
-  // Generate Base Edges
+  // Map of node ID to node category
+  const idToCategory = useMemo(() => {
+    const map = new Map<string, NodeCategory>()
+    workflowData.nodes.forEach((n) => {
+      map.set(n.id, n._meta.category)
+    })
+    return map
+  }, [])
+
+  // Generate Base Edges with 100% matched handles
   const baseEdges = useMemo(() => {
     const edges: Edge[] = []
     const connections = workflowData.connections
@@ -53,6 +69,7 @@ export function useWorkflowGraph() {
     Object.entries(connections).forEach(([sourceName, connTypes]) => {
       const sourceId = nameToId.get(sourceName)
       if (!sourceId) return
+      const sourceCat = idToCategory.get(sourceId) || 'other'
 
       Object.entries(connTypes).forEach(([connType, routes]) => {
         routes.forEach((route, routeIndex) => {
@@ -63,15 +80,26 @@ export function useWorkflowGraph() {
             const edgeId = `e-${sourceId}-${targetId}-${connType}-${routeIndex}-${targetIndex}`
             const isMain = connType === 'main'
 
-            // Source handle mapping
+            // Handle resolution
             let sourceHandle = 'main'
-            if (connType === 'ai_languageModel') sourceHandle = 'ai_languageModel'
-            else if (connType === 'ai_tool') sourceHandle = 'ai_tool'
-            else if (connType === 'ai_memory') sourceHandle = 'ai_memory'
-            else if (routeIndex === 0 && (sourceName.startsWith('IF:') || sourceName.startsWith('Switch:'))) {
-              sourceHandle = 'true'
-            } else if (routeIndex === 1 && (sourceName.startsWith('IF:') || sourceName.startsWith('Switch:'))) {
-              sourceHandle = 'false'
+            let targetHandle = isMain ? 'main' : connType
+
+            if (connType === 'ai_languageModel') {
+              sourceHandle = 'ai_languageModel'
+              targetHandle = 'ai_languageModel'
+            } else if (connType === 'ai_tool') {
+              sourceHandle = 'ai_tool'
+              targetHandle = 'ai_tool'
+            } else if (connType === 'ai_memory') {
+              sourceHandle = 'ai_memory'
+              targetHandle = 'ai_memory'
+            } else if (sourceCat === 'condition' || sourceName.startsWith('IF:')) {
+              sourceHandle = routeIndex === 0 ? 'true' : 'false'
+            } else if (sourceCat === 'router' || sourceName.startsWith('Switch:')) {
+              sourceHandle = `route-${routeIndex}`
+            } else if (sourceCat === 'agent' && routeIndex === 1) {
+              // Agent fallback path
+              sourceHandle = 'fallback'
             }
 
             edges.push({
@@ -79,9 +107,9 @@ export function useWorkflowGraph() {
               source: sourceId,
               target: targetId,
               sourceHandle,
-              targetHandle: isMain ? 'main' : connType,
+              targetHandle,
               type: 'custom',
-              animated: isMain,
+              animated: isMain && routeIndex === 0,
               data: {
                 connectionType: connType as any,
                 routeIndex,
@@ -92,7 +120,7 @@ export function useWorkflowGraph() {
                     type: MarkerType.ArrowClosed,
                     width: 14,
                     height: 14,
-                    color: '#818cf8',
+                    color: routeIndex === 1 ? '#f59e0b' : '#818cf8',
                   }
                 : undefined,
             })
@@ -102,9 +130,9 @@ export function useWorkflowGraph() {
     })
 
     return edges
-  }, [nameToId])
+  }, [nameToId, idToCategory])
 
-  // Build React Flow Nodes with guaranteed initialWidth and initialHeight
+  // Build React Flow Nodes with explicit dimensions and pre-defined handles
   const baseNodes = useMemo(() => {
     return workflowData.nodes.map((n) => {
       const category = n._meta.category
@@ -126,7 +154,7 @@ export function useWorkflowGraph() {
       const zIndex = isSticky ? -10 : 10
 
       const width = isSticky
-        ? (n.parameters?.width || 2280)
+        ? (n.parameters?.width || 2400)
         : category === 'agent'
         ? 300
         : category === 'model'
@@ -138,7 +166,7 @@ export function useWorkflowGraph() {
         : 280
 
       const height = isSticky
-        ? (n.parameters?.height || 680)
+        ? (n.parameters?.height || 500)
         : category === 'agent'
         ? 145
         : category === 'model'
@@ -147,7 +175,57 @@ export function useWorkflowGraph() {
         ? 115
         : category === 'memory'
         ? 95
+        : category === 'router'
+        ? 140
         : 120
+
+      // Pre-seed handle bounds for instant edge rendering
+      let handles: any[] = []
+      if (category === 'agent') {
+        handles = [
+          { id: 'main', type: 'target', position: Position.Left, x: 0, y: 72 },
+          { id: 'main', type: 'source', position: Position.Right, x: width, y: 55 },
+          { id: 'fallback', type: 'source', position: Position.Right, x: width, y: 100 },
+          { id: 'ai_languageModel', type: 'target', position: Position.Bottom, x: width * 0.25, y: height },
+          { id: 'ai_memory', type: 'target', position: Position.Bottom, x: width * 0.5, y: height },
+          { id: 'ai_tool', type: 'target', position: Position.Bottom, x: width * 0.75, y: height },
+        ]
+      } else if (category === 'model') {
+        handles = [
+          { id: 'ai_languageModel', type: 'source', position: Position.Top, x: width * 0.5, y: 0 },
+        ]
+      } else if (category === 'tool') {
+        handles = [
+          { id: 'ai_tool', type: 'source', position: Position.Top, x: width * 0.5, y: 0 },
+        ]
+      } else if (category === 'memory') {
+        handles = [
+          { id: 'ai_memory', type: 'source', position: Position.Top, x: width * 0.5, y: 0 },
+        ]
+      } else if (category === 'condition') {
+        handles = [
+          { id: 'main', type: 'target', position: Position.Left, x: 0, y: height * 0.5 },
+          { id: 'true', type: 'source', position: Position.Right, x: width, y: height * 0.35 },
+          { id: 'false', type: 'source', position: Position.Right, x: width, y: height * 0.65 },
+          { id: 'main', type: 'source', position: Position.Right, x: width, y: height * 0.5 },
+        ]
+      } else if (category === 'router') {
+        handles = [
+          { id: 'main', type: 'target', position: Position.Left, x: 0, y: height * 0.5 },
+          { id: 'route-0', type: 'source', position: Position.Right, x: width, y: height * 0.2 },
+          { id: 'route-1', type: 'source', position: Position.Right, x: width, y: height * 0.4 },
+          { id: 'route-2', type: 'source', position: Position.Right, x: width, y: height * 0.6 },
+          { id: 'route-3', type: 'source', position: Position.Right, x: width, y: height * 0.8 },
+          { id: 'main', type: 'source', position: Position.Right, x: width, y: height * 0.5 },
+        ]
+      } else if (!isSticky) {
+        handles = [
+          ...(category !== 'trigger' ? [{ id: 'main', type: 'target', position: Position.Left, x: 0, y: height * 0.5 }] : []),
+          ...(category !== 'stop' && category !== 'webhookResponse'
+            ? [{ id: 'main', type: 'source', position: Position.Right, x: width, y: height * 0.5 }]
+            : []),
+        ]
+      }
 
       return {
         id: n.id,
@@ -155,6 +233,8 @@ export function useWorkflowGraph() {
         position: { x: n.position[0], y: n.position[1] },
         initialWidth: width,
         initialHeight: height,
+        measured: { width, height },
+        handles,
         data: {
           raw: n,
           initialPosition: n.position,
@@ -208,7 +288,9 @@ export function useWorkflowGraph() {
         position: currentPos,
         initialWidth: (node as any).initialWidth,
         initialHeight: (node as any).initialHeight,
-        hidden: false, // Guarantee nodes are NEVER hidden on the canvas
+        measured: (node as any).measured,
+        handles: (node as any).handles,
+        hidden: false,
         data: {
           ...node.data,
           isSelected,
@@ -241,7 +323,6 @@ export function useWorkflowGraph() {
     selectedNodeId,
     highlightedNodeIds,
     highlightedEdgeIds,
-    layoutMode,
     customPositions,
   ])
 

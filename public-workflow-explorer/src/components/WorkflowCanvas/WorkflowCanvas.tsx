@@ -4,7 +4,7 @@
  * Licensed under the MIT License.
  */
 
-import React, { useRef, useState, useEffect, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import {
   ReactFlow,
   Background,
@@ -66,32 +66,24 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
   theme,
   activeStageId,
 }) => {
-  const { zoomIn, zoomOut, fitView } = useReactFlow()
+  const { zoomIn, zoomOut, fitView, fitBounds, setCenter } = useReactFlow()
   // Hide minimap by default so it never blocks the screen
   const [showMinimap, setShowMinimap] = useState(false)
-  const isInitialFit = useRef(false)
-
-  // Mark initial load ready
-  useEffect(() => {
-    if (!isInitialFit.current && nodes.length > 0) {
-      isInitialFit.current = true
-    }
-  }, [nodes])
 
   // Center on selected node when clicked from search or agent list
   useEffect(() => {
     if (selectedNodeId) {
       const targetNode = nodes.find((n) => n.id === selectedNodeId)
       if (targetNode) {
-        fitView({
-          nodes: [{ id: targetNode.id }],
-          padding: 1.0,
+        const w = (targetNode.data as any)?.width || 280
+        const h = (targetNode.data as any)?.height || 120
+        setCenter(targetNode.position.x + w / 2, targetNode.position.y + h / 2, {
+          zoom: 1.05,
           duration: 600,
-          maxZoom: 1.15,
         })
       }
     }
-  }, [selectedNodeId, nodes, fitView])
+  }, [selectedNodeId, setCenter])
 
   // Pan and zoom directly to stage row when clicked in the sidebar
   useEffect(() => {
@@ -100,15 +92,27 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
         (n) => (n.data?.raw as any)?._meta?.stage?.id === activeStageId && n.type !== 'stickyGroup'
       )
       if (stageNodes.length > 0) {
-        fitView({
-          nodes: stageNodes.map((n) => ({ id: n.id })),
-          padding: 0.25,
-          duration: 600,
-          maxZoom: 0.9,
+        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity
+        stageNodes.forEach((n) => {
+          const w = (n.data as any)?.width || 280
+          const h = (n.data as any)?.height || 120
+          minX = Math.min(minX, n.position.x)
+          minY = Math.min(minY, n.position.y)
+          maxX = Math.max(maxX, n.position.x + w)
+          maxY = Math.max(maxY, n.position.y + h)
         })
+        fitBounds(
+          {
+            x: minX - 60,
+            y: minY - 60,
+            width: (maxX - minX) + 120,
+            height: (maxY - minY) + 120,
+          },
+          { padding: 0.15, duration: 600 }
+        )
       }
     }
-  }, [activeStageId, nodes, fitView])
+  }, [activeStageId, fitBounds])
 
   // When layout mode changes (Dagre Flow vs Stage Rows), re-align camera
   const handleChangeLayoutMode = useCallback((mode: LayoutMode) => {

@@ -174,11 +174,10 @@ export const GenericNode: React.FC<GenericNodeProps> = ({ data }) => {
   }
 
   const currentConfig = configMap[category] || configMap.other
-  const isBranchNode = category === 'condition' || category === 'router'
 
   return (
     <div
-      className={`relative w-[260px] rounded-xl border bg-white dark:bg-slate-900 p-3 backdrop-blur-md transition-all duration-200 shadow-md ${
+      className={`relative w-[280px] rounded-xl border bg-white dark:bg-slate-900 p-3 backdrop-blur-md transition-all duration-200 shadow-md ${
         isSelected
           ? 'border-indigo-600 ring-2 ring-indigo-500 shadow-xl scale-[1.02]'
           : isHighlighted
@@ -186,7 +185,7 @@ export const GenericNode: React.FC<GenericNodeProps> = ({ data }) => {
           : `${currentConfig.border} hover:shadow-lg`
       }`}
     >
-      {/* Input Handle */}
+      {/* Input Handle (Left) */}
       {category !== 'trigger' && (
         <Handle
           type="target"
@@ -206,7 +205,7 @@ export const GenericNode: React.FC<GenericNodeProps> = ({ data }) => {
             {currentConfig.badge}
           </span>
         </div>
-        <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate max-w-[95px]">
+        <span className="text-[10px] text-slate-500 dark:text-slate-400 font-medium truncate max-w-[105px]">
           {raw._meta.stage.shortName}
         </span>
       </div>
@@ -221,8 +220,50 @@ export const GenericNode: React.FC<GenericNodeProps> = ({ data }) => {
         </p>
       </div>
 
-      {/* Output Handles */}
-      {isBranchNode ? (
+      {/* Output Handles (Right) */}
+      {category === 'router' ? (
+        <>
+          <Handle
+            type="source"
+            position={Position.Right}
+            id="route-0"
+            style={{ top: '20%' }}
+            className="!w-2.5 !h-2.5 !bg-amber-500 !border-2 !border-white dark:!border-slate-900"
+            title="Route 0: Agent 3 (RoPA)"
+          />
+          <Handle
+            type="source"
+            position={Position.Right}
+            id="route-1"
+            style={{ top: '40%' }}
+            className="!w-2.5 !h-2.5 !bg-teal-500 !border-2 !border-white dark:!border-slate-900"
+            title="Route 1: Agent 4 (Data Flow)"
+          />
+          <Handle
+            type="source"
+            position={Position.Right}
+            id="route-2"
+            style={{ top: '60%' }}
+            className="!w-2.5 !h-2.5 !bg-indigo-500 !border-2 !border-white dark:!border-slate-900"
+            title="Route 2: Agent 5 (DPDP Mapping)"
+          />
+          <Handle
+            type="source"
+            position={Position.Right}
+            id="route-3"
+            style={{ top: '80%' }}
+            className="!w-2.5 !h-2.5 !bg-rose-500 !border-2 !border-white dark:!border-slate-900"
+            title="Route 3: Agent 6 (Risk Assessment)"
+          />
+          <Handle
+            type="source"
+            position={Position.Right}
+            id="main"
+            style={{ top: '50%' }}
+            className="!w-2.5 !h-2.5 !bg-orange-500 !border-2 !border-white dark:!border-slate-900 opacity-0"
+          />
+        </>
+      ) : category === 'condition' ? (
         <>
           <Handle
             type="source"
@@ -239,6 +280,13 @@ export const GenericNode: React.FC<GenericNodeProps> = ({ data }) => {
             style={{ top: '65%' }}
             className="!w-2.5 !h-2.5 !bg-rose-500 !border-2 !border-white dark:!border-slate-900"
             title="Output 1 / False"
+          />
+          <Handle
+            type="source"
+            position={Position.Right}
+            id="main"
+            style={{ top: '50%' }}
+            className="!w-2.5 !h-2.5 !bg-amber-500 !border-2 !border-white dark:!border-slate-900 opacity-0"
           />
         </>
       ) : category !== 'stop' && category !== 'webhookResponse' ? (

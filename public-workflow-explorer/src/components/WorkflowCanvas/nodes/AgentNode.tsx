@@ -161,15 +161,25 @@ export const AgentNode: React.FC<AgentNodeProps> = ({ data }) => {
         </div>
       </div>
 
-      {/* Right Output Handle */}
+      {/* Right Output Handles */}
       <Handle
         type="source"
         position={Position.Right}
         id="main"
+        style={{ top: '40%' }}
         className="!w-3 !h-3 !bg-indigo-600 dark:!bg-indigo-400 !border-2 !border-white dark:!border-slate-900"
+        title="Success Route (0)"
+      />
+      <Handle
+        type="source"
+        position={Position.Right}
+        id="fallback"
+        style={{ top: '70%' }}
+        className="!w-3 !h-3 !bg-amber-500 !border-2 !border-white dark:!border-slate-900"
+        title="Fallback Route (1)"
       />
 
-      {/* Bottom Model/Memory/Tool Handles */}
+      {/* Bottom Model/Memory/Tool Target Handles */}
       <Handle
         type="target"
         position={Position.Bottom}

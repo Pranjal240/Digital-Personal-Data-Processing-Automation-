@@ -678,8 +678,8 @@
     {
       "parameters": {
         "content": "## ROW 04 : Document Intelligence (A1) & Personal Data Identification (A2)\n- **Agent 1**: Classifies document, clarifies contextual meaning of 'DPA', extracts sections, parties, and contradictions with `[EV-...]` citations\n- **Agent 2**: Identifies Data Principal categories (`DP-001`) and Personal Data categories (`PD-001`) without inventing unstated industry fields",
-        "height": 980,
-        "width": 1420,
+        "height": 450,
+        "width": 2400,
         "color": 5
       },
       "type": "n8n-nodes-base.stickyNote",
@@ -768,7 +768,7 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        550,
+        400,
         2050
       ],
       "id": "a92c87ae-c726-422c-972a-0d14310fd084",
@@ -794,7 +794,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        580,
+        430,
         2250
       ],
       "id": "1596cddd-211c-42bd-ba1d-74003cf29033",
@@ -823,7 +823,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1000,
+        800,
         2050
       ],
       "id": "ac89d131-1c34-4f66-9252-198ab0003947",
@@ -849,8 +849,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        0,
-        2550
+        1180,
+        2050
       ],
       "id": "ac662d3a-d3dc-4603-aff1-3db8c57f2a55",
       "name": "Agent 2: Personal Data ID",
@@ -873,8 +873,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.2,
       "position": [
-        30,
-        2750
+        1210,
+        2250
       ],
       "id": "846f635d-55b5-4528-a001-23da129c6ea5",
       "name": "Gemini Main Model: A2",
@@ -906,8 +906,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        550,
-        2550
+        1580,
+        2050
       ],
       "id": "832cefc4-10e5-48e9-b6cb-d6e7fdd47323",
       "name": "FallBack2",
@@ -932,8 +932,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        580,
-        2750
+        1610,
+        2250
       ],
       "id": "1d3f2102-8f18-4e4c-97c9-abd6e5a6535c",
       "name": "OpenRouter Fallback Model: A2",
@@ -961,8 +961,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1000,
-        2550
+        1980,
+        2050
       ],
       "id": "6d74b4b0-c32d-44ce-92f0-9d7417835a98",
       "name": "Parse & Validate A2",
