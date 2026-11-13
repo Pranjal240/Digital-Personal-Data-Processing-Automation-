@@ -71,28 +71,12 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
   const [showMinimap, setShowMinimap] = useState(false)
   const isInitialFit = useRef(false)
 
-  // Initial camera focus on mount: cleanly focus on Row 01 nodes with robust fitView
+  // Mark initial load ready
   useEffect(() => {
     if (!isInitialFit.current && nodes.length > 0) {
-      const timer = setTimeout(() => {
-        const row1Nodes = nodes.filter(
-          (n) => (n.data?.raw as any)?._meta?.stage?.id === 'stage-01' && n.type !== 'stickyGroup'
-        )
-        if (row1Nodes.length > 0) {
-          fitView({
-            nodes: row1Nodes.map((n) => ({ id: n.id })),
-            padding: 0.3,
-            duration: 500,
-            maxZoom: 0.85,
-          })
-        } else {
-          fitView({ padding: 0.15, duration: 500 })
-        }
-        isInitialFit.current = true
-      }, 120)
-      return () => clearTimeout(timer)
+      isInitialFit.current = true
     }
-  }, [nodes, fitView])
+  }, [nodes])
 
   // Center on selected node when clicked from search or agent list
   useEffect(() => {
@@ -138,21 +122,9 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
   const handleResetLayout = useCallback(() => {
     onResetLayout()
     setTimeout(() => {
-      const row1Nodes = nodes.filter(
-        (n) => (n.data?.raw as any)?._meta?.stage?.id === 'stage-01' && n.type !== 'stickyGroup'
-      )
-      if (row1Nodes.length > 0) {
-        fitView({
-          nodes: row1Nodes.map((n) => ({ id: n.id })),
-          padding: 0.3,
-          duration: 500,
-          maxZoom: 0.85,
-        })
-      } else {
-        fitView({ padding: 0.15, duration: 600 })
-      }
+      fitView({ padding: 0.15, duration: 600 })
     }, 80)
-  }, [onResetLayout, nodes, fitView])
+  }, [onResetLayout, fitView])
 
   const handleNodeClick: NodeMouseHandler = (_, node) => {
     if (node.type !== 'stickyGroup') {
@@ -181,7 +153,7 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
   }
 
   return (
-    <div className={`relative w-full h-full select-none transition-colors overflow-hidden ${theme === 'dark' ? 'bg-[#080c14]' : 'bg-[#f1f5f9]'}`}>
+    <div className={`relative w-full h-full select-none transition-colors overflow-hidden ${theme === 'dark' ? 'bg-[#080c14]' : 'bg-[#f8fafc]'}`}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -193,10 +165,10 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
         nodesDraggable={true}
         nodesConnectable={false}
         elementsSelectable={true}
-        fitView
-        fitViewOptions={{ padding: 0.15, minZoom: 0.25, maxZoom: 1.0 }}
+        defaultViewport={{ x: 80, y: 60, zoom: 0.75 }}
         minZoom={0.05}
         maxZoom={2.5}
+        fitViewOptions={{ padding: 0.15 }}
         defaultEdgeOptions={{
           type: 'custom',
           animated: true,

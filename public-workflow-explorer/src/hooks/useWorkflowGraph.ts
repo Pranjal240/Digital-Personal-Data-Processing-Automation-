@@ -104,7 +104,7 @@ export function useWorkflowGraph() {
     return edges
   }, [nameToId])
 
-  // Build React Flow Nodes
+  // Build React Flow Nodes with guaranteed initialWidth and initialHeight
   const baseNodes = useMemo(() => {
     return workflowData.nodes.map((n) => {
       const category = n._meta.category
@@ -125,15 +125,41 @@ export function useWorkflowGraph() {
       const isSticky = category === 'stickyNote'
       const zIndex = isSticky ? -10 : 10
 
+      const width = isSticky
+        ? (n.parameters?.width || 2280)
+        : category === 'agent'
+        ? 300
+        : category === 'model'
+        ? 240
+        : category === 'tool'
+        ? 250
+        : category === 'memory'
+        ? 220
+        : 280
+
+      const height = isSticky
+        ? (n.parameters?.height || 680)
+        : category === 'agent'
+        ? 145
+        : category === 'model'
+        ? 110
+        : category === 'tool'
+        ? 115
+        : category === 'memory'
+        ? 95
+        : 120
+
       return {
         id: n.id,
         type: nodeType,
         position: { x: n.position[0], y: n.position[1] },
+        initialWidth: width,
+        initialHeight: height,
         data: {
           raw: n,
           initialPosition: n.position,
-          width: n.parameters?.width || 280,
-          height: n.parameters?.height || 120,
+          width,
+          height,
         },
         zIndex,
         draggable: true, // Allow full free movability on all nodes!
@@ -167,7 +193,6 @@ export function useWorkflowGraph() {
       const matchesStage = !activeStage || raw._meta.stage.id === activeStage
       const matchesCategory = activeCat === 'all' || raw._meta.category === activeCat
 
-      const isVisible = (matchesSearch && matchesStage && matchesCategory) || raw._meta.category === 'stickyNote'
       const isSelected = selectedNodeId === node.id
       const isHighlighted =
         highlightedNodeIds.has(node.id) ||
@@ -181,7 +206,9 @@ export function useWorkflowGraph() {
       return {
         ...node,
         position: currentPos,
-        hidden: !isVisible && layoutMode !== 'native',
+        initialWidth: (node as any).initialWidth,
+        initialHeight: (node as any).initialHeight,
+        hidden: false, // Guarantee nodes are NEVER hidden on the canvas
         data: {
           ...node.data,
           isSelected,

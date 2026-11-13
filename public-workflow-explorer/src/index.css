@@ -48,6 +48,11 @@ html.dark body {
   display: none !important;
 }
 
+/* Guarantee all nodes are always rendered visible */
+.react-flow__node {
+  visibility: visible !important;
+}
+
 /* Controls - Light Mode */
 .react-flow__controls {
   box-shadow:
