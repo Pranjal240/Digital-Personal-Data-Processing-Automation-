@@ -66,52 +66,48 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
   theme,
   activeStageId,
 }) => {
-  const { zoomIn, zoomOut, fitView, setCenter } = useReactFlow()
+  const { zoomIn, zoomOut, fitView } = useReactFlow()
   // Hide minimap by default so it never blocks the screen
   const [showMinimap, setShowMinimap] = useState(false)
   const isInitialFit = useRef(false)
 
-  // Initial camera focus on mount: directly center on Row 01 (Intake & Security) at clear zoom 0.85
+  // Initial camera focus on mount: cleanly focus on Row 01 nodes with robust fitView
   useEffect(() => {
     if (!isInitialFit.current && nodes.length > 0) {
       const timer = setTimeout(() => {
-        // Focus on Row 01 nodes
         const row1Nodes = nodes.filter(
           (n) => (n.data?.raw as any)?._meta?.stage?.id === 'stage-01' && n.type !== 'stickyGroup'
         )
         if (row1Nodes.length > 0) {
-          let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
-          row1Nodes.forEach((n) => {
-            const w = (n.data?.width as number) || 280
-            const h = (n.data?.height as number) || 120
-            minX = Math.min(minX, n.position.x)
-            maxX = Math.max(maxX, n.position.x + w)
-            minY = Math.min(minY, n.position.y)
-            maxY = Math.max(maxY, n.position.y + h)
+          fitView({
+            nodes: row1Nodes.map((n) => ({ id: n.id })),
+            padding: 0.3,
+            duration: 500,
+            maxZoom: 0.85,
           })
-          const centerX = minX + (maxX - minX) / 2
-          const centerY = minY + (maxY - minY) / 2
-          setCenter(centerX, centerY, { zoom: 0.85, duration: 500 })
         } else {
-          setCenter(200, 200, { zoom: 0.85, duration: 500 })
+          fitView({ padding: 0.15, duration: 500 })
         }
         isInitialFit.current = true
-      }, 100)
+      }, 120)
       return () => clearTimeout(timer)
     }
-  }, [nodes, setCenter])
+  }, [nodes, fitView])
 
   // Center on selected node when clicked from search or agent list
   useEffect(() => {
     if (selectedNodeId) {
       const targetNode = nodes.find((n) => n.id === selectedNodeId)
       if (targetNode) {
-        const x = targetNode.position.x + ((targetNode.data?.width as number) || 280) / 2
-        const y = targetNode.position.y + ((targetNode.data?.height as number) || 120) / 2
-        setCenter(x, y, { zoom: 1.15, duration: 800 })
+        fitView({
+          nodes: [{ id: targetNode.id }],
+          padding: 1.0,
+          duration: 600,
+          maxZoom: 1.15,
+        })
       }
     }
-  }, [selectedNodeId, nodes, setCenter])
+  }, [selectedNodeId, nodes, fitView])
 
   // Pan and zoom directly to stage row when clicked in the sidebar
   useEffect(() => {
@@ -120,49 +116,43 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
         (n) => (n.data?.raw as any)?._meta?.stage?.id === activeStageId && n.type !== 'stickyGroup'
       )
       if (stageNodes.length > 0) {
-        let minX = Infinity
-        let maxX = -Infinity
-        let minY = Infinity
-        let maxY = -Infinity
-
-        stageNodes.forEach((n) => {
-          const w = (n.data?.width as number) || 280
-          const h = (n.data?.height as number) || 120
-          minX = Math.min(minX, n.position.x)
-          maxX = Math.max(maxX, n.position.x + w)
-          minY = Math.min(minY, n.position.y)
-          maxY = Math.max(maxY, n.position.y + h)
+        fitView({
+          nodes: stageNodes.map((n) => ({ id: n.id })),
+          padding: 0.25,
+          duration: 600,
+          maxZoom: 0.9,
         })
-
-        const width = maxX - minX
-        const height = maxY - minY
-        const centerX = minX + width / 2
-        const centerY = minY + height / 2
-
-        setCenter(centerX, centerY, { zoom: 0.85, duration: 800 })
       }
     }
-  }, [activeStageId, nodes, setCenter])
+  }, [activeStageId, nodes, fitView])
 
   // When layout mode changes (Dagre Flow vs Stage Rows), re-align camera
   const handleChangeLayoutMode = useCallback((mode: LayoutMode) => {
     onChangeLayoutMode(mode)
     setTimeout(() => {
-      if (mode === 'horizontal') {
-        fitView({ padding: 0.2, duration: 600 })
-      } else {
-        setCenter(200, 200, { zoom: 0.85, duration: 600 })
-      }
+      fitView({ padding: 0.15, duration: 600 })
     }, 80)
-  }, [onChangeLayoutMode, fitView, setCenter])
+  }, [onChangeLayoutMode, fitView])
 
-  // Reset design layout and re-center on Row 01
+  // Reset design layout and re-center view
   const handleResetLayout = useCallback(() => {
     onResetLayout()
     setTimeout(() => {
-      setCenter(200, 200, { zoom: 0.85, duration: 600 })
+      const row1Nodes = nodes.filter(
+        (n) => (n.data?.raw as any)?._meta?.stage?.id === 'stage-01' && n.type !== 'stickyGroup'
+      )
+      if (row1Nodes.length > 0) {
+        fitView({
+          nodes: row1Nodes.map((n) => ({ id: n.id })),
+          padding: 0.3,
+          duration: 500,
+          maxZoom: 0.85,
+        })
+      } else {
+        fitView({ padding: 0.15, duration: 600 })
+      }
     }, 80)
-  }, [onResetLayout, setCenter])
+  }, [onResetLayout, nodes, fitView])
 
   const handleNodeClick: NodeMouseHandler = (_, node) => {
     if (node.type !== 'stickyGroup') {
@@ -203,7 +193,8 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
         nodesDraggable={true}
         nodesConnectable={false}
         elementsSelectable={true}
-        defaultViewport={{ x: 200, y: 150, zoom: 0.85 }}
+        fitView
+        fitViewOptions={{ padding: 0.15, minZoom: 0.25, maxZoom: 1.0 }}
         minZoom={0.05}
         maxZoom={2.5}
         defaultEdgeOptions={{

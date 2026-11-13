@@ -57,11 +57,12 @@ function WorkflowExplorerApp() {
   const [showBanner, setShowBanner] = useState(true)
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
 
-  // Default to light theme on load, with persistent toggle
+  // Default to light theme on load (Day mode), with user-toggled persistence
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     try {
-      const saved = localStorage.getItem('dpdp_theme')
-      return saved === 'dark' ? 'dark' : 'light'
+      const saved = localStorage.getItem('dpdp_theme_v2')
+      if (saved === 'dark' || saved === 'light') return saved
+      return 'light'
     } catch {
       return 'light'
     }
@@ -69,7 +70,7 @@ function WorkflowExplorerApp() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('dpdp_theme', theme)
+      localStorage.setItem('dpdp_theme_v2', theme)
     } catch {}
 
     const root = document.documentElement
@@ -77,10 +78,14 @@ function WorkflowExplorerApp() {
       root.classList.add('dark')
       root.setAttribute('data-theme', 'dark')
       root.style.colorScheme = 'dark'
+      document.body.style.backgroundColor = '#080c14'
+      document.body.style.color = '#f1f5f9'
     } else {
       root.classList.remove('dark')
       root.setAttribute('data-theme', 'light')
       root.style.colorScheme = 'light'
+      document.body.style.backgroundColor = '#f8fafc'
+      document.body.style.color = '#0f172a'
     }
   }, [theme])
 

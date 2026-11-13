@@ -164,20 +164,20 @@ export const Navbar: React.FC<NavbarProps> = ({
           onClick={onToggleTheme}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold transition-all shadow-xs cursor-pointer ${
             theme === 'dark'
-              ? 'bg-slate-800 border-slate-700 text-amber-300 hover:bg-slate-700'
-              : 'bg-indigo-50 border-indigo-200 text-indigo-700 hover:bg-indigo-100'
+              ? 'bg-slate-800 border-slate-700 text-amber-300 hover:bg-slate-700 hover:text-amber-200'
+              : 'bg-white border-slate-300 text-slate-800 hover:bg-slate-100 shadow-sm'
           }`}
-          title={`Currently ${theme === 'dark' ? 'Night (Dark)' : 'Day (Light)'} Mode. Click to toggle.`}
+          title={`Currently in ${theme === 'dark' ? 'Night (Dark)' : 'Day (Light)'} Mode. Click to toggle.`}
         >
           {theme === 'dark' ? (
             <>
-              <Sun className="w-3.5 h-3.5 text-amber-400" />
-              <span>Night</span>
+              <Moon className="w-3.5 h-3.5 text-amber-400" />
+              <span>Night Mode</span>
             </>
           ) : (
             <>
-              <Moon className="w-3.5 h-3.5 text-indigo-600" />
-              <span>Day</span>
+              <Sun className="w-3.5 h-3.5 text-amber-500" />
+              <span>Day Mode</span>
             </>
           )}
         </button>
