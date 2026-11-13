@@ -242,7 +242,7 @@ export function useWorkflowGraph() {
           height,
         },
         zIndex,
-        draggable: true, // Allow full free movability on all nodes!
+        draggable: false, // Diagram nodes are fixed and non-draggable for perfect architecture presentation
         selectable: !isSticky,
       } as Node
     })

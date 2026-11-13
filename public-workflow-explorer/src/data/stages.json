@@ -5,8 +5,8 @@
     "title": "Intake & Security",
     "description": "Secure document ingestion via header-authenticated webhook, cryptographic verification, file size and MIME inspection, and initial 202/400 HTTP response.",
     "yRange": [
-      -80,
-      600
+      0,
+      440
     ],
     "technologies": [
       "n8n Webhook",
@@ -21,8 +21,8 @@
     "title": "Document Extraction & Evidence Store",
     "description": "Multi-format document parsing (PDF via PyMuPDF, DOCX via python-docx, XLSX via openpyxl), SHA-256 chunking, PII redaction, and database evidence registration.",
     "yRange": [
-      656,
-      1336
+      540,
+      900
     ],
     "technologies": [
       "FastAPI",
@@ -38,8 +38,8 @@
     "title": "Agent Orchestration (Agent 0)",
     "description": "Autonomous planning and task formulation by Agent 0, supported by PostgreSQL scoped session memory and Gemini/OpenRouter LLMs.",
     "yRange": [
-      1392,
-      2112
+      1000,
+      1520
     ],
     "technologies": [
       "LangChain Agent",
@@ -54,8 +54,8 @@
     "title": "Document Intelligence & Personal Data ID (A1 & A2)",
     "description": "Contractual clause parsing by Agent 1 and Personal Data Inventory classification by Agent 2, backed by citation validation tools.",
     "yRange": [
-      2176,
-      2936
+      1620,
+      2140
     ],
     "technologies": [
       "LangChain Agents",
@@ -70,8 +70,8 @@
     "title": "Processing Activities & RoPA Register (A3)",
     "description": "Construction of statutory Records of Processing Activities (RoPA) by Agent 3, linking business purposes, systems, and retention schedules.",
     "yRange": [
-      2992,
-      3712
+      2240,
+      2760
     ],
     "technologies": [
       "LangChain Agent",
@@ -86,8 +86,8 @@
     "title": "Data Flow Analysis & Topology (A4)",
     "description": "Topological modeling of data movements between fiduciaries, processors, third parties, and databases by Agent 4.",
     "yRange": [
-      3776,
-      4496
+      2860,
+      3380
     ],
     "technologies": [
       "LangChain Agent",
@@ -101,8 +101,8 @@
     "title": "DPDP Compliance Mapping (A5)",
     "description": "Benchmarking findings against the India DPDP Act 2023 statutory catalogue by Agent 5, classifying requirements into evidenced, gaps, or verification-needed.",
     "yRange": [
-      4560,
-      5280
+      3480,
+      4000
     ],
     "technologies": [
       "LangChain Agent",
@@ -116,8 +116,8 @@
     "title": "Risk & Gap Assessment (A6)",
     "description": "Privacy risk rating and gap detection by Agent 6, generating actionable remediation roadmaps with severity scoring.",
     "yRange": [
-      5328,
-      6048
+      4100,
+      4620
     ],
     "technologies": [
       "LangChain Agent",
@@ -131,8 +131,8 @@
     "title": "QA & Autonomous Self-Correction Loop (A7)",
     "description": "Senior reviewer gatekeeper Agent 7. Inspects package integrity, checks citations, and dynamically routes revision requests back to A3, A4, A5, or A6 up to 2 attempts.",
     "yRange": [
-      6112,
-      6872
+      4720,
+      5400
     ],
     "technologies": [
       "LangChain Agent",
@@ -147,8 +147,8 @@
     "title": "Deterministic Mermaid DFD Generation",
     "description": "Deterministic JavaScript compilation of verified data flows into Level 0 and Level 1 Mermaid DFD diagrams for rendering into SVG and PNG.",
     "yRange": [
-      6928,
-      7348
+      5500,
+      5860
     ],
     "technologies": [
       "JavaScript Code Node",
@@ -162,8 +162,8 @@
     "title": "Human Approval Gate & Reviewer Briefing (A8)",
     "description": "Executive briefing synthesis by Agent 8, compilation of HTML/Word review package with embedded SQL, and interactive n8n Wait approval gate with revision routing.",
     "yRange": [
-      7408,
-      8228
+      5960,
+      6740
     ],
     "technologies": [
       "LangChain Agent (A8)",
@@ -178,8 +178,8 @@
     "title": "Reporting, Persistence & Final Delivery",
     "description": "Final consolidation and dispatch: FastAPI exports multi-tab Excel RoPA, compliance PDF matrix, rendered diagrams, and sends confirmation emails with attachments.",
     "yRange": [
-      8240,
-      8800
+      6840,
+      7200
     ],
     "technologies": [
       "FastAPI Multi-Format Exporter",
@@ -195,8 +195,8 @@
     "title": "Error Handling & Centralized Auditing",
     "description": "Global workflow error trap. Sanitizes stack traces, notifies FastAPI job error API, and commits error states to PostgreSQL job audit logs.",
     "yRange": [
-      8848,
-      9388
+      7300,
+      7660
     ],
     "technologies": [
       "n8n Error Trigger",

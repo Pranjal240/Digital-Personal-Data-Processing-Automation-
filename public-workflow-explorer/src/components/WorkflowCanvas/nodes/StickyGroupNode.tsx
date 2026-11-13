@@ -5,7 +5,7 @@
  */
 
 import React from 'react'
-import { Bookmark, Layers } from 'lucide-react'
+import { Bookmark, Layers, Cpu } from 'lucide-react'
 import type { WorkflowNode } from '../../../types/workflow'
 
 interface StickyGroupNodeProps {
@@ -19,9 +19,10 @@ interface StickyGroupNodeProps {
 export const StickyGroupNode: React.FC<StickyGroupNodeProps> = ({ data }) => {
   const { raw } = data
   const params = raw.parameters || {}
-  const width = params.width || 2280
-  const height = params.height || 680
+  const width = params.width || 2400
+  const height = params.height || 500
   const content = params.content || ''
+  const isMaster = raw.name.includes('Master Overview')
 
   const lines = content.split('\n')
   const title = lines[0]?.replace(/^#+\s*/, '') || raw.name
@@ -30,13 +31,17 @@ export const StickyGroupNode: React.FC<StickyGroupNodeProps> = ({ data }) => {
   return (
     <div
       style={{ width: `${width}px`, height: `${height}px` }}
-      className="relative rounded-2xl border border-slate-300 dark:border-slate-800/80 bg-slate-100/50 dark:bg-slate-950/40 p-6 backdrop-blur-[2px] transition-all pointer-events-none select-none shadow-sm dark:shadow-2xl"
+      className={`relative rounded-2xl border transition-all pointer-events-none select-none shadow-sm dark:shadow-2xl ${
+        isMaster
+          ? 'border-indigo-300 dark:border-indigo-800/80 bg-gradient-to-r from-indigo-50/70 via-white/80 to-blue-50/70 dark:from-indigo-950/40 dark:via-slate-900/40 dark:to-blue-950/40 p-5'
+          : 'border-slate-200/90 dark:border-slate-800/80 bg-slate-50/60 dark:bg-slate-950/40 p-6 backdrop-blur-[2px]'
+      }`}
     >
       {/* Top stage header */}
-      <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800/60 pb-3">
+      <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800/60 pb-3">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20">
-            <Bookmark className="w-5 h-5" />
+            {isMaster ? <Cpu className="w-5 h-5" /> : <Bookmark className="w-5 h-5" />}
           </div>
           <div>
             <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 tracking-tight flex items-center gap-2">
@@ -55,7 +60,7 @@ export const StickyGroupNode: React.FC<StickyGroupNodeProps> = ({ data }) => {
 
         <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-500 font-mono">
           <Layers className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-          <span>Stage Boundary</span>
+          <span>{isMaster ? 'Production System' : 'Stage Boundary'}</span>
         </div>
       </div>
 

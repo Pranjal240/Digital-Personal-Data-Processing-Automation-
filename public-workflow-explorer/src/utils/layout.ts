@@ -13,6 +13,7 @@ export function applyLayout(
     return {
       nodes: nodes.map((node) => ({
         ...node,
+        hidden: false,
         position: {
           x: node.data?.initialPosition ? (node.data.initialPosition as [number, number])[0] : node.position.x,
           y: node.data?.initialPosition ? (node.data.initialPosition as [number, number])[1] : node.position.y,
@@ -28,11 +29,13 @@ export function applyLayout(
   const isHorizontal = mode === 'horizontal'
   dagreGraph.setGraph({
     rankdir: isHorizontal ? 'LR' : 'TB',
-    nodesep: isHorizontal ? 60 : 70,
-    ranksep: isHorizontal ? 120 : 100,
+    nodesep: isHorizontal ? 80 : 90,
+    ranksep: isHorizontal ? 160 : 140,
+    align: 'DL',
+    ranker: 'network-simplex',
   })
 
-  // Exclude sticky notes from dagre graph to keep the flowchart clean
+  // Exclude sticky notes from dagre graph to keep the flowchart clean and focused
   const operationalNodes = nodes.filter((n) => n.type !== 'stickyGroup')
 
   operationalNodes.forEach((node) => {
@@ -41,12 +44,26 @@ export function applyLayout(
     dagreGraph.setNode(node.id, { width, height })
   })
 
+  // Map of node IDs to raw nodes
+  const nodeMap = new Map<string, Node>()
+  operationalNodes.forEach((n) => nodeMap.set(n.id, n))
+
   edges.forEach((edge) => {
-    // Only connect if both nodes are operational
-    if (
-      operationalNodes.some((n) => n.id === edge.source) &&
-      operationalNodes.some((n) => n.id === edge.target)
-    ) {
+    const src = nodeMap.get(edge.source)
+    const tgt = nodeMap.get(edge.target)
+    if (!src || !tgt) return
+
+    const srcName = (src.data?.raw as any)?.name || ''
+    const tgtName = (tgt.data?.raw as any)?.name || ''
+
+    // Skip cyclic feedback loops and cross-stage shared evidence tool from ranking calculation
+    // so that the DAG remains strictly ordered, clean, and un-tangled
+    const isFeedback =
+      srcName.includes('Switch: Route QA Revision') ||
+      srcName.includes('Switch: Route Human Revision') ||
+      (srcName === 'Tool: Search & Validate Evidence' && !tgtName.includes('Agent 3') && !tgtName.includes('FallBack3'))
+
+    if (!isFeedback) {
       dagreGraph.setEdge(edge.source, edge.target)
     }
   })
@@ -55,7 +72,7 @@ export function applyLayout(
 
   const positionedNodes = nodes.map((node) => {
     if (node.type === 'stickyGroup') {
-      // Hide sticky note background containers during auto-layout
+      // In auto-layout flowcharts, background sticky frames are hidden
       return {
         ...node,
         hidden: true,
@@ -70,8 +87,8 @@ export function applyLayout(
         ...node,
         hidden: false,
         position: {
-          x: nodeWithPosition.x - width / 2,
-          y: nodeWithPosition.y - height / 2,
+          x: Math.round(nodeWithPosition.x - width / 2),
+          y: Math.round(nodeWithPosition.y - height / 2),
         },
       }
     }

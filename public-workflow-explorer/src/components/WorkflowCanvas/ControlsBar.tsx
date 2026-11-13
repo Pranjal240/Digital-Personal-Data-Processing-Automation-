@@ -5,9 +5,10 @@ import {
   Maximize2,
   RotateCcw,
   LayoutGrid,
-  GitPullRequest,
+  ArrowRight,
+  ArrowDown,
   Map,
-  Filter
+  Lock
 } from 'lucide-react'
 import type { LayoutMode } from '../../utils/layout'
 
@@ -62,7 +63,7 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
 
       <div className="w-[1px] h-5 bg-slate-200 dark:bg-slate-800 mx-1" />
 
-      {/* Layout Modes */}
+      {/* Structured Layout Modes */}
       <div className="flex items-center bg-slate-100 dark:bg-slate-950/80 p-0.5 rounded-lg border border-slate-200 dark:border-slate-800/80">
         <button
           onClick={() => onChangeLayoutMode('native')}
@@ -71,7 +72,7 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
               ? 'bg-indigo-600 text-white shadow-sm'
               : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
           }`}
-          title="Original n8n canvas layout with row sections"
+          title="Architectural Row Stages with Background Cards"
         >
           <LayoutGrid className="w-3.5 h-3.5" />
           <span>Stage Rows</span>
@@ -83,23 +84,35 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
               ? 'bg-indigo-600 text-white shadow-sm'
               : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
           }`}
-          title="Hierarchical Left-to-Right DAG layout"
+          title="Clean Left-to-Right Horizontal Flow"
         >
-          <GitPullRequest className="w-3.5 h-3.5" />
-          <span>Dagre Flow</span>
+          <ArrowRight className="w-3.5 h-3.5" />
+          <span>Horizontal Flow</span>
+        </button>
+        <button
+          onClick={() => onChangeLayoutMode('vertical')}
+          className={`px-2.5 py-1 text-xs rounded-md font-medium transition flex items-center gap-1.5 ${
+            layoutMode === 'vertical'
+              ? 'bg-indigo-600 text-white shadow-sm'
+              : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
+          }`}
+          title="Top-to-Bottom Vertical Pipeline Flow"
+        >
+          <ArrowDown className="w-3.5 h-3.5" />
+          <span>Vertical Flow</span>
         </button>
       </div>
 
       <div className="w-[1px] h-5 bg-slate-200 dark:bg-slate-800 mx-1" />
 
-      {/* Prominent One-Click Fix & Reset Original Design Button */}
+      {/* Reset Camera View Button */}
       <button
         onClick={onResetLayout}
-        className="px-2.5 py-1 text-xs rounded-md font-medium transition flex items-center gap-1.5 bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/40 hover:bg-indigo-100 dark:hover:bg-indigo-500/30 shadow-xs"
-        title="Arrange & snap all moved nodes back to original non-overlapping design positions"
+        className="px-2.5 py-1 text-xs rounded-md font-medium transition flex items-center gap-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-700"
+        title="Reset camera zoom and pan back to top-level view"
       >
         <RotateCcw className="w-3.5 h-3.5" />
-        <span className="font-semibold">Reset Design Layout</span>
+        <span className="font-semibold">Reset View</span>
       </button>
 
       <div className="w-[1px] h-5 bg-slate-200 dark:bg-slate-800 mx-1" />
@@ -117,10 +130,10 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
         <Map className="w-4 h-4" />
       </button>
 
-      {/* Total nodes pill */}
-      <div className="hidden sm:flex items-center gap-1.5 pl-2 pr-1 text-[11px] font-mono text-slate-600 dark:text-slate-400">
-        <Filter className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-        <span>{totalNodesCount} Nodes</span>
+      {/* Fixed Layout Indicator */}
+      <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 dark:bg-slate-800/80 text-[11px] font-mono text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
+        <Lock className="w-3 h-3 text-slate-400" />
+        <span>Fixed Diagram ({totalNodesCount} Nodes)</span>
       </div>
     </div>
   )
