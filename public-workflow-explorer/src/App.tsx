@@ -1,12 +1,20 @@
-import { useState, useMemo } from 'react'
+/**
+ * DPDP AI Automation Workflow Explorer
+ * © 2026 Pranjal (Pranjal240). All rights reserved.
+ * Licensed under the MIT License.
+ */
+
+import { useState, useMemo, useEffect } from 'react'
 import { ReactFlowProvider } from '@xyflow/react'
 import { Navbar } from './components/Navbar/Navbar'
-import { Sidebar } from './components/Sidebar/Sidebar'
+import { FramerSidebar } from './components/Sidebar/FramerSidebar'
 import { WorkflowCanvas } from './components/WorkflowCanvas/WorkflowCanvas'
 import { NodeDetailsDrawer } from './components/NodeDetails/NodeDetailsDrawer'
 import { AgentExplorerModal } from './components/AgentExplorer/AgentExplorerModal'
 import { OverviewModal } from './components/Overview/OverviewModal'
 import { TechnologyStackModal } from './components/TechnologyStack/TechnologyStackModal'
+import { FlowButton } from './components/ui/FlowButton'
+import { Info, X, GitFork } from 'lucide-react'
 
 import agentsDataRaw from './data/agents.json'
 import stagesDataRaw from './data/stages.json'
@@ -40,12 +48,34 @@ function WorkflowExplorerApp() {
   } = useWorkflowGraph()
 
   // UI state
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true)
   const [isOverviewOpen, setIsOverviewOpen] = useState(false)
   const [isTechStackOpen, setIsTechStackOpen] = useState(false)
   const [isAgentExplorerOpen, setIsAgentExplorerOpen] = useState(false)
   const [isFullscreen, setIsFullscreen] = useState(false)
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark')
+  const [showBanner, setShowBanner] = useState(true)
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false)
+
+  // Default to light theme on load, with persistent toggle
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    try {
+      const saved = localStorage.getItem('dpdp_theme')
+      return saved === 'dark' ? 'dark' : 'light'
+    } catch {
+      return 'light'
+    }
+  })
+
+  useEffect(() => {
+    try {
+      localStorage.setItem('dpdp_theme', theme)
+    } catch {}
+
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+    }
+  }, [theme])
 
   // Selected agent identifier if selected node is an agent
   const selectedAgentId = useMemo(() => {
@@ -111,14 +141,14 @@ function WorkflowExplorerApp() {
   }
 
   return (
-    <div className={`w-screen h-screen flex flex-col overflow-hidden ${theme === 'dark' ? 'bg-[#080c14] text-slate-100' : 'bg-slate-100 text-slate-900'}`}>
+    <div className={`w-screen h-screen flex flex-col overflow-hidden ${theme === 'dark' ? 'bg-[#0b0f19] text-slate-100' : 'bg-slate-50 text-slate-900'}`}>
       {/* Top Navbar */}
       <Navbar
         onOpenOverview={() => setIsOverviewOpen(true)}
         onOpenTechStack={() => setIsTechStackOpen(true)}
         onOpenAgentExplorer={() => setIsAgentExplorerOpen(true)}
-        onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
-        isSidebarOpen={isSidebarOpen}
+        onToggleSidebar={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+        isSidebarOpen={isMobileSidebarOpen}
         isFullscreen={isFullscreen}
         onToggleFullscreen={handleToggleFullscreen}
         theme={theme}
@@ -128,8 +158,8 @@ function WorkflowExplorerApp() {
 
       {/* Main Layout Body */}
       <div className="flex-1 relative flex overflow-hidden">
-        {/* Left Sidebar */}
-        <Sidebar
+        {/* Left Expandable Rail Sidebar */}
+        <FramerSidebar
           agents={agentsData}
           stages={stagesData}
           searchQuery={searchQuery}
@@ -140,28 +170,65 @@ function WorkflowExplorerApp() {
           onSelectStage={setActiveStageId}
           onFocusAgent={focusAgent}
           selectedAgentId={selectedAgentId}
-          isOpen={isSidebarOpen}
-          onToggleOpen={() => setIsSidebarOpen(!isSidebarOpen)}
+          isMobileOpen={isMobileSidebarOpen}
+          onToggleMobileOpen={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
         />
 
         {/* Center Interactive Graph Canvas */}
-        <main className={`flex-1 h-full transition-all duration-300 ${isSidebarOpen ? 'md:ml-80' : 'ml-0'}`}>
-          <WorkflowCanvas
-            nodes={nodes}
-            edges={edges}
-            selectedNodeId={selectedNodeId}
-            onSelectNode={selectNode}
-            layoutMode={layoutMode}
-            onChangeLayoutMode={setLayoutMode}
-            onResetLayout={() => {
-              setLayoutMode('native')
-              setActiveStageId(null)
-              setActiveCategory('all')
-              setSearchQuery('')
-              selectNode(null)
-            }}
-            totalNodesCount={totalNodes}
-          />
+        <main className="flex-1 h-full ml-0 md:ml-16 relative flex flex-col transition-all duration-300">
+          {/* Interactive Disclaimer Banner */}
+          {showBanner && (
+            <div className="relative z-20 mx-3 sm:mx-6 mt-3 px-4 py-2.5 rounded-xl border border-indigo-200/80 dark:border-indigo-500/30 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
+              <div className="flex items-center gap-2.5">
+                <div className="p-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 shrink-0">
+                  <Info className="w-4 h-4" />
+                </div>
+                <p className="text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
+                  <strong className="font-semibold text-slate-900 dark:text-slate-100">Interactive Architecture Explorer:</strong> This is a public, read-only interactive viewer for exploring the DPDP multi-agent n8n workflow. Running the live production automation requires the backend setup and environment installation, which is free and open-source on GitHub.
+                </p>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
+                <FlowButton
+                  text="Get Backend Setup"
+                  icon={GitFork}
+                  size="sm"
+                  variant="accent"
+                  href="https://github.com/Pranjal240/Digital-Personal-Data-Processing-Automation-"
+                  target="_blank"
+                  rel="noreferrer"
+                />
+                <button
+                  onClick={() => setShowBanner(false)}
+                  className="p-1 rounded-md text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                  title="Dismiss Notice"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Graph Viewport */}
+          <div className="flex-1 relative overflow-hidden">
+            <WorkflowCanvas
+              nodes={nodes}
+              edges={edges}
+              selectedNodeId={selectedNodeId}
+              onSelectNode={selectNode}
+              layoutMode={layoutMode}
+              onChangeLayoutMode={setLayoutMode}
+              onResetLayout={() => {
+                setLayoutMode('native')
+                setActiveStageId(null)
+                setActiveCategory('all')
+                setSearchQuery('')
+                selectNode(null)
+              }}
+              totalNodesCount={totalNodes}
+              theme={theme}
+            />
+          </div>
         </main>
 
         {/* Right Node Details Drawer */}

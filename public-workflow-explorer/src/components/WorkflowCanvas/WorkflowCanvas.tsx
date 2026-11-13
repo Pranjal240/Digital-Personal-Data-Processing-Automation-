@@ -1,3 +1,9 @@
+/**
+ * DPDP AI Automation Workflow Explorer
+ * © 2026 Pranjal (Pranjal240). All rights reserved.
+ * Licensed under the MIT License.
+ */
+
 import React, { useRef, useState, useEffect } from 'react'
 import {
   ReactFlow,
@@ -28,6 +34,7 @@ interface WorkflowCanvasProps {
   onChangeLayoutMode: (mode: LayoutMode) => void
   onResetLayout: () => void
   totalNodesCount: number
+  theme: 'dark' | 'light'
 }
 
 const nodeTypes = {
@@ -52,6 +59,7 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
   onChangeLayoutMode,
   onResetLayout,
   totalNodesCount,
+  theme,
 }) => {
   const { zoomIn, zoomOut, fitView, setCenter } = useReactFlow()
   const [showMinimap, setShowMinimap] = useState(true)
@@ -91,22 +99,22 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
 
   // MiniMap node color mapper
   const minimapNodeColor = (node: Node) => {
-    if (node.type === 'agent') return '#818cf8'
+    if (node.type === 'agent') return '#6366f1'
     if (node.type === 'model') return '#f59e0b'
     if (node.type === 'tool') return '#06b6d4'
     if (node.type === 'memory') return '#10b981'
-    if (node.type === 'stickyGroup') return '#1e293b'
+    if (node.type === 'stickyGroup') return theme === 'dark' ? '#1e293b' : '#e2e8f0'
     const cat = (node.data?.raw as any)?._meta?.category
     if (cat === 'database') return '#3b82f6'
     if (cat === 'http') return '#8b5cf6'
-    if (cat === 'trigger') return '#10b981'
+    if (cat === 'trigger') return '#14b8a6'
     if (cat === 'notification') return '#f43f5e'
     if (cat === 'condition' || cat === 'router') return '#eab308'
-    return '#475569'
+    return '#94a3b8'
   }
 
   return (
-    <div className="relative w-full h-full bg-[#080c14] overflow-hidden select-none">
+    <div className="relative w-full h-full bg-slate-50 dark:bg-[#080c14] overflow-hidden select-none transition-colors">
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -126,7 +134,7 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
           variant={BackgroundVariant.Dots}
           gap={24}
           size={1.5}
-          color="#1e293b"
+          color={theme === 'dark' ? '#334155' : '#cbd5e1'}
           className="opacity-70"
         />
 
@@ -135,9 +143,9 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
             nodeColor={minimapNodeColor}
             nodeStrokeWidth={2}
             nodeBorderRadius={4}
-            maskColor="rgba(8, 12, 20, 0.75)"
+            maskColor={theme === 'dark' ? 'rgba(8, 12, 20, 0.75)' : 'rgba(248, 250, 252, 0.75)'}
             position="bottom-right"
-            className="!bottom-6 !right-6 !m-0 !w-56 !h-36 !bg-slate-950/90 !border !border-slate-800 !rounded-xl !shadow-2xl"
+            className="!bottom-6 !right-6 !m-0 !w-56 !h-36 !rounded-xl !shadow-xl"
           />
         )}
       </ReactFlow>
@@ -157,4 +165,3 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
     </div>
   )
 }
-

@@ -135,5 +135,19 @@ npm run security-audit
 
 ---
 
-## 📄 License
-MIT License.
+## 🌐 Live Interactive Architecture Explorer
+- **Live URL**: [https://pranjal240.github.io/Digital-Personal-Data-Processing-Automation-/](https://pranjal240.github.io/Digital-Personal-Data-Processing-Automation-/)
+- **Features**:
+  - **Day / Night Themes**: High-contrast, clean day mode enabled by default with seamless night mode switching.
+  - **Multi-Color Visual Architecture**: Color-coded node topology (A0–A8 agents, primary/fallback LLMs, tools, memory, DB, code, conditionals, human-in-the-loop gates).
+  - **Framer Motion Expandable Sidebar**: Compact 64px icon rail with auto-expansion to 300px, stage index, category filters, and pin lock.
+  - **Dynamic FlowButtons**: Fluid micro-animated navigation and action triggers.
+  - **100% Client-Side & Air-Gapped**: Runs entirely in the browser from sanitized workflow JSON definitions.
+
+---
+
+## 📄 License & Attribution
+Created and maintained by **Pranjal ([@Pranjal240](https://github.com/Pranjal240))**.  
+Licensed under the MIT License.
+
+
