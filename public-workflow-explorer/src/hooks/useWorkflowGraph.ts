@@ -3,6 +3,7 @@ import {
   type Node,
   type Edge,
   MarkerType,
+  type NodeChange,
 } from '@xyflow/react'
 import workflowDataRaw from '../data/workflow.json'
 import type {
@@ -22,6 +23,9 @@ export function useWorkflowGraph() {
   const [activeStageId, setActiveStageId] = useState<string | null>(null)
   const [activeCategory, setActiveCategory] = useState<NodeCategory | 'all'>('all')
   const [layoutMode, setLayoutMode] = useState<LayoutMode>('native')
+
+  // Dynamic user-moved custom node positions for free movability
+  const [customPositions, setCustomPositions] = useState<Map<string, { x: number; y: number }>>(new Map())
 
   // Map of node name to node ID
   const nameToId = useMemo(() => {
@@ -132,7 +136,7 @@ export function useWorkflowGraph() {
           height: n.parameters?.height || 120,
         },
         zIndex,
-        draggable: !isSticky,
+        draggable: true, // Allow full free movability on all nodes!
         selectable: !isSticky,
       } as Node
     })
@@ -143,7 +147,7 @@ export function useWorkflowGraph() {
     return applyLayout(baseNodes, baseEdges, layoutMode)
   }, [baseNodes, baseEdges, layoutMode])
 
-  // Apply Search, Filter, and Highlighting
+  // Apply Search, Filter, Highlighting, and Custom Movable Positions
   const processedGraph = useMemo(() => {
     const q = searchQuery.trim().toLowerCase()
     const activeStage = activeStageId
@@ -165,16 +169,24 @@ export function useWorkflowGraph() {
 
       const isVisible = (matchesSearch && matchesStage && matchesCategory) || raw._meta.category === 'stickyNote'
       const isSelected = selectedNodeId === node.id
-      const isHighlighted = highlightedNodeIds.has(node.id) || (q.length > 0 && matchesSearch)
+      const isHighlighted =
+        highlightedNodeIds.has(node.id) ||
+        (q.length > 0 && matchesSearch) ||
+        (activeStage !== null && matchesStage && raw._meta.category !== 'stickyNote')
+
+      // Position: use user-dragged position if available, else layout position
+      const customPos = customPositions.get(node.id)
+      const currentPos = customPos ? customPos : node.position
 
       return {
         ...node,
-        hidden: !isVisible && layoutMode === 'native' ? false : !isVisible,
+        position: currentPos,
+        hidden: !isVisible && layoutMode !== 'native',
         data: {
           ...node.data,
           isSelected,
           isHighlighted,
-          dimmed: (activeStage || activeCat !== 'all' || q.length > 0) && !matchesSearch && !matchesStage && !matchesCategory,
+          dimmed: (activeStage !== null && !matchesStage) || (activeCat !== 'all' && !matchesCategory),
         },
       }
     })
@@ -203,7 +215,33 @@ export function useWorkflowGraph() {
     highlightedNodeIds,
     highlightedEdgeIds,
     layoutMode,
+    customPositions,
   ])
+
+  // Handle free movement changes from React Flow
+  const onNodesChange = useCallback((changes: NodeChange[]) => {
+    setCustomPositions((prev) => {
+      const next = new Map(prev)
+      changes.forEach((change) => {
+        if (change.type === 'position' && change.position && change.id) {
+          next.set(change.id, change.position)
+        }
+      })
+      return next
+    })
+  }, [])
+
+  // Reset to original non-overlapping design layout
+  const resetLayout = useCallback(() => {
+    setCustomPositions(new Map())
+    setLayoutMode('native')
+    setActiveStageId(null)
+    setActiveCategory('all')
+    setSearchQuery('')
+    setSelectedNodeId(null)
+    setHighlightedNodeIds(new Set())
+    setHighlightedEdgeIds(new Set())
+  }, [])
 
   // Select a node and highlight its neighborhood
   const selectNode = useCallback(
@@ -257,6 +295,8 @@ export function useWorkflowGraph() {
   return {
     nodes: processedGraph.nodes,
     edges: processedGraph.edges,
+    onNodesChange,
+    resetLayout,
     selectedNode,
     selectedNodeId,
     selectNode,

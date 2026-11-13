@@ -31,6 +31,8 @@ function WorkflowExplorerApp() {
   const {
     nodes,
     edges,
+    onNodesChange,
+    resetLayout,
     selectedNode,
     selectedNodeId,
     selectNode,
@@ -214,19 +216,15 @@ function WorkflowExplorerApp() {
             <WorkflowCanvas
               nodes={nodes}
               edges={edges}
+              onNodesChange={onNodesChange}
               selectedNodeId={selectedNodeId}
               onSelectNode={selectNode}
               layoutMode={layoutMode}
               onChangeLayoutMode={setLayoutMode}
-              onResetLayout={() => {
-                setLayoutMode('native')
-                setActiveStageId(null)
-                setActiveCategory('all')
-                setSearchQuery('')
-                selectNode(null)
-              }}
+              onResetLayout={resetLayout}
               totalNodesCount={totalNodes}
               theme={theme}
+              activeStageId={activeStageId}
             />
           </div>
         </main>

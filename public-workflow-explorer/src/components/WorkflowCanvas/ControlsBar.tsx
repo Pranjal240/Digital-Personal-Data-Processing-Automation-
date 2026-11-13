@@ -71,7 +71,7 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
               ? 'bg-indigo-600 text-white shadow-sm'
               : 'text-slate-600 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-200'
           }`}
-          title="Preserve original n8n canvas layout with row sections"
+          title="Original n8n canvas layout with row sections"
         >
           <LayoutGrid className="w-3.5 h-3.5" />
           <span>Stage Rows</span>
@@ -90,12 +90,16 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
         </button>
       </div>
 
+      <div className="w-[1px] h-5 bg-slate-200 dark:bg-slate-800 mx-1" />
+
+      {/* Prominent One-Click Fix & Reset Original Design Button */}
       <button
         onClick={onResetLayout}
-        className="p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800 transition"
-        title="Reset Canvas View"
+        className="px-2.5 py-1 text-xs rounded-md font-medium transition flex items-center gap-1.5 bg-indigo-50 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/40 hover:bg-indigo-100 dark:hover:bg-indigo-500/30 shadow-xs"
+        title="Arrange & snap all moved nodes back to original non-overlapping design positions"
       >
-        <RotateCcw className="w-4 h-4" />
+        <RotateCcw className="w-3.5 h-3.5" />
+        <span className="font-semibold">Reset Design Layout</span>
       </button>
 
       <div className="w-[1px] h-5 bg-slate-200 dark:bg-slate-800 mx-1" />
@@ -108,7 +112,7 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
             ? 'bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/30'
             : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-800'
         }`}
-        title="Toggle Minimap"
+        title="Toggle Minimap Overview"
       >
         <Map className="w-4 h-4" />
       </button>
@@ -116,7 +120,7 @@ export const ControlsBar: React.FC<ControlsBarProps> = ({
       {/* Total nodes pill */}
       <div className="hidden sm:flex items-center gap-1.5 pl-2 pr-1 text-[11px] font-mono text-slate-600 dark:text-slate-400">
         <Filter className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400" />
-        <span>{totalNodesCount} Nodes Loaded</span>
+        <span>{totalNodesCount} Nodes</span>
       </div>
     </div>
   )

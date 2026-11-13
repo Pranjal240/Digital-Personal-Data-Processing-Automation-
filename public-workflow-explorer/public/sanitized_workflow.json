@@ -5,14 +5,14 @@
     {
       "parameters": {
         "content": "# DPDP AI Automation V2: Multi-Agent Production System (Vertical Layout)\n",
-        "height": 80,
-        "width": 1256
+        "height": 520,
+        "width": 1872
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -224,
-        -240
+        -572,
+        -80
       ],
       "id": "2949ca06-d798-4a58-9c28-1e62e57eef94",
       "name": "Sticky: Master Overview",
@@ -29,14 +29,14 @@
     {
       "parameters": {
         "content": "## ROW 01: Intake and Security\n- Header-authenticated Webhook (`POST /webhook/dpdp-upload`)\n- Validates `tenant_id`, `project_id`, file size, extension, MIME type, and `external_llm_consent`\n- Initializes authoritative job state in PostgreSQL `job_state` (`qa_attempts = 0`, `human_attempts = 0`)",
-        "height": 680,
-        "width": 2280,
+        "height": 520,
+        "width": 1872,
         "color": 4
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -656,
+        -572,
         -80
       ],
       "id": "cae05871-459d-48f8-b77f-63fac70ca04a",
@@ -92,7 +92,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -192,
+        -140,
         160
       ],
       "id": "9c3cf73b-28c4-4e90-a857-b34f4a7d9352",
@@ -135,7 +135,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        128,
+        240,
         160
       ],
       "id": "1c248393-6b10-4cda-b70e-8574035ab123",
@@ -161,8 +161,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        480,
-        32
+        620,
+        40
       ],
       "id": "24da82c2-83a7-43ee-9bb3-505da6469d53",
       "name": "Respond: 202 Accepted",
@@ -187,8 +187,8 @@
       "type": "n8n-nodes-base.respondToWebhook",
       "typeVersion": 1.1,
       "position": [
-        480,
-        336
+        620,
+        280
       ],
       "id": "0e52d0a1-d964-4cc1-bf1e-8f5ef5908dd5",
       "name": "Respond: 400 Rejected",
@@ -213,7 +213,7 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        816,
+        980,
         160
       ],
       "id": "d589441f-f630-41f2-a892-52a7cf7afdfd",
@@ -238,15 +238,15 @@
     {
       "parameters": {
         "content": "## ROW 02 : Document Extraction and Evidence\n- Calls FastAPI `POST /api/v1/extract` with binary file from `Validate Input & Config`\n- Automatically scans chunks for `[REDACTED_EMAIL]`, `[REDACTED_PHONE]`, `[REDACTED_PAN]`, `[REDACTED_AADHAAR]` to build `redaction_summary` for Human Review",
-        "height": 680,
-        "width": 2280,
+        "height": 280,
+        "width": 1552,
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -656,
-        656
+        -572,
+        776
       ],
       "id": "268afb99-81c5-4759-924a-4870340d4ad5",
       "name": "Sticky: 02 Extraction and Evidence",
@@ -322,7 +322,7 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -160,
+        -140,
         896
       ],
       "id": "f9fdc5a5-d6cc-4006-8406-2ee1a17715a2",
@@ -354,7 +354,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        192,
+        240,
         896
       ],
       "id": "7d63ed97-5c1e-4c3e-b7f5-0b0139a316b2",
@@ -380,7 +380,7 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        592,
+        660,
         896
       ],
       "id": "1784c770-96a5-429b-a3c1-09ecab6e1be9",
@@ -405,15 +405,15 @@
     {
       "parameters": {
         "content": "## ROW 03 : Agent Orchestration (Agent 0: Orchestrator / Planner)\n- Native n8n AI Agent (`@n8n/n8n-nodes-langchain.agent`) + `Gemini Main Model: A0` + `FallBack0` (`OpenRouter Fallback Model: A0`)\n- Analyses incoming document manifest, clarifies 'DPA' usage, and creates the specialist execution plan",
-        "height": 720,
-        "width": 2280,
+        "height": 578,
+        "width": 2332,
         "color": 5
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -656,
-        1392
+        -572,
+        1432
       ],
       "id": "4465150d-2e69-4bf4-9d68-2748426b011e",
       "name": "Sticky: 03 Agent Orchestration",
@@ -438,7 +438,7 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        -432,
+        -512,
         1552
       ],
       "id": "8e47fe4a-940c-4adc-b2ea-bfd4eecf4011",
@@ -462,8 +462,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.2,
       "position": [
-        -464,
-        1840
+        -512,
+        1850
       ],
       "id": "ac28b5f6-2435-4ae5-a9ac-42046ab87f0c",
       "name": "Gemini Main Model: A0",
@@ -493,8 +493,8 @@
       "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
       "typeVersion": 1.3,
       "position": [
-        -288,
-        1840
+        -210,
+        1850
       ],
       "id": "8d884453-22e8-4e5b-91c4-0851733b32f6",
       "name": "Postgres Chat Memory (Scoped)",
@@ -524,8 +524,8 @@
       "type": "@n8n/n8n-nodes-langchain.toolCode",
       "typeVersion": 1.1,
       "position": [
-        -112,
-        1840
+        90,
+        1850
       ],
       "id": "2bdd065e-912f-4cc1-9464-5ba34be8afce",
       "name": "Tool: Retrieve Document Metadata",
@@ -550,7 +550,7 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        176,
+        460,
         1552
       ],
       "id": "bd23b3e6-956a-4f2a-bf3e-7641f2bf55c3",
@@ -576,8 +576,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        128,
-        1840
+        460,
+        1850
       ],
       "id": "67d80cea-ca67-454b-975e-84bd40081e32",
       "name": "OpenRouter Fallback Model: A0",
@@ -607,8 +607,8 @@
       "type": "@n8n/n8n-nodes-langchain.memoryPostgresChat",
       "typeVersion": 1.3,
       "position": [
-        320,
-        1840
+        760,
+        1850
       ],
       "id": "41008a58-2a94-4b1a-9173-00411a69e848",
       "name": "Postgres Chat Memory (Scoped)1",
@@ -638,8 +638,8 @@
       "type": "@n8n/n8n-nodes-langchain.toolCode",
       "typeVersion": 1.1,
       "position": [
-        496,
-        1840
+        1060,
+        1850
       ],
       "id": "ce12972a-a24c-4f8f-a84d-650d6a2f94b6",
       "name": "Tool: Retrieve Document Metadata1",
@@ -660,7 +660,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        832,
+        1440,
         1552
       ],
       "id": "503aa9ad-bb91-4ae3-8503-7eae2895ba69",
@@ -678,15 +678,15 @@
     {
       "parameters": {
         "content": "## ROW 04 : Document Intelligence (A1) & Personal Data Identification (A2)\n- **Agent 1**: Classifies document, clarifies contextual meaning of 'DPA', extracts sections, parties, and contradictions with `[EV-...]` citations\n- **Agent 2**: Identifies Data Principal categories (`DP-001`) and Personal Data categories (`PD-001`) without inventing unstated industry fields",
-        "height": 760,
-        "width": 2280,
+        "height": 580,
+        "width": 2272,
         "color": 5
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -656,
-        2176
+        -572,
+        2220
       ],
       "id": "5ed3566a-faa2-46ce-9ef0-557004b5b3f3",
       "name": "Sticky: 04 Personal Data Analysis",
@@ -711,8 +711,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        -480,
-        2336
+        -512,
+        2340
       ],
       "id": "70cfd24c-8b2a-4d73-a8da-b8480698610d",
       "name": "Agent 1: Document Intelligence",
@@ -735,7 +735,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.2,
       "position": [
-        -480,
+        -512,
         2640
       ],
       "id": "788684b4-54ee-409c-83b1-fd8315407bb0",
@@ -768,8 +768,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        -128,
-        2336
+        -140,
+        2340
       ],
       "id": "a92c87ae-c726-422c-972a-0d14310fd084",
       "name": "FallBack1",
@@ -794,7 +794,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        -128,
+        -140,
         2640
       ],
       "id": "1596cddd-211c-42bd-ba1d-74003cf29033",
@@ -823,8 +823,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        256,
-        2336
+        240,
+        2340
       ],
       "id": "ac89d131-1c34-4f66-9252-198ab0003947",
       "name": "Parse & Validate A1",
@@ -849,8 +849,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        528,
-        2336
+        620,
+        2340
       ],
       "id": "ac662d3a-d3dc-4603-aff1-3db8c57f2a55",
       "name": "Agent 2: Personal Data ID",
@@ -873,7 +873,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.2,
       "position": [
-        528,
+        620,
         2640
       ],
       "id": "846f635d-55b5-4528-a001-23da129c6ea5",
@@ -906,8 +906,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        896,
-        2336
+        1000,
+        2340
       ],
       "id": "832cefc4-10e5-48e9-b6cb-d6e7fdd47323",
       "name": "FallBack2",
@@ -932,7 +932,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        896,
+        1000,
         2640
       ],
       "id": "1d3f2102-8f18-4e4c-97c9-abd6e5a6535c",
@@ -961,8 +961,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1280,
-        2336
+        1380,
+        2340
       ],
       "id": "6d74b4b0-c32d-44ce-92f0-9d7417835a98",
       "name": "Parse & Validate A2",
@@ -979,15 +979,15 @@
     {
       "parameters": {
         "content": "## ROW 05 : Processing Activities (Agent 3: RoPA Builder)\n- Native n8n AI Agent (`@n8n/n8n-nodes-langchain.agent`) + `Gemini Main Model: A3` + `FallBack3` (`OpenRouter Fallback Model: A3`)\n- Builds the Processing Activities Register (`ACT-001`...) with default `verification_status: 'pending_review'`\n- Receives targeted A3 QA correction requests (`by_agent.A3`) and Human Reviewer feedback directly from `Wait: Human Approval Form`",
-        "height": 720,
-        "width": 2280,
+        "height": 580,
+        "width": 1572,
         "color": 2
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -656,
-        2992
+        -572,
+        3040
       ],
       "id": "6d144d79-7d65-4eaf-9f80-6b8ff9a1e7cc",
       "name": "Sticky: 05 Processing Activities",
@@ -1012,8 +1012,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        -432,
-        3152
+        -512,
+        3160
       ],
       "id": "5ca9df9d-72d2-478c-bf28-5bf394e99cea",
       "name": "Agent 3: Processing Activities",
@@ -1036,8 +1036,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.2,
       "position": [
-        -432,
-        3456
+        -512,
+        3460
       ],
       "id": "d31ec83c-7011-4c98-8a4e-7b910df67a15",
       "name": "Gemini Main Model: A3",
@@ -1069,8 +1069,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        80,
-        3152
+        -140,
+        3160
       ],
       "id": "28f8bb71-8f82-4239-9e7e-b938a6df5d52",
       "name": "FallBack3",
@@ -1095,8 +1095,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        80,
-        3456
+        -140,
+        3460
       ],
       "id": "28183987-9ad4-49e5-8462-816aafe46aea",
       "name": "OpenRouter Fallback Model: A3",
@@ -1124,8 +1124,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        656,
-        3152
+        240,
+        3160
       ],
       "id": "cdc5120c-169d-4fae-9bfd-eb36f23ae065",
       "name": "Parse & Validate A3",
@@ -1142,15 +1142,15 @@
     {
       "parameters": {
         "content": "# Shared Evidence Tool\n* Search & Validate Evidence\n* Connected to A1..A6 & FallBack0..7",
-        "height": 308,
-        "width": 392,
+        "height": 580,
+        "width": 1572,
         "color": 5
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        1696,
-        3024
+        -572,
+        3040
       ],
       "id": "54cb1c5f-4daf-4663-b2cf-32a862248e97",
       "name": "Sticky Note",
@@ -1173,8 +1173,8 @@
       "type": "@n8n/n8n-nodes-langchain.toolCode",
       "typeVersion": 1.1,
       "position": [
-        1968,
-        3184
+        680,
+        3200
       ],
       "id": "bd3d796a-375d-482e-971c-e5ad20680c5a",
       "name": "Tool: Search & Validate Evidence",
@@ -1191,15 +1191,15 @@
     {
       "parameters": {
         "content": "## ROW 06 : Data Flow Analysis (Agent 4)\n- Native n8n AI Agent (`@n8n/n8n-nodes-langchain.agent`) + `Gemini Main Model: A4` + `FallBack4` (`OpenRouter Fallback Model: A4`)\n- Builds validated entity & flow graph JSON (`ENT-001`, `FLW-001`) and receives targeted A4 QA/Human correction instructions",
-        "height": 720,
-        "width": 2280,
+        "height": 580,
+        "width": 1732,
         "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -656,
-        3776
+        -572,
+        3820
       ],
       "id": "2ae0d619-9855-4444-905e-5b79931e0da8",
       "name": "Sticky: 06 Data Flow Analysis",
@@ -1224,8 +1224,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        -432,
-        3936
+        -512,
+        3940
       ],
       "id": "8cb5a740-da65-4452-8d89-9fe8bab8ddca",
       "name": "Agent 4: Data Flow Analysis",
@@ -1248,7 +1248,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.2,
       "position": [
-        -464,
+        -512,
         4240
       ],
       "id": "5162efe3-3068-4382-927a-cf1198b9c61f",
@@ -1279,7 +1279,7 @@
       "type": "@n8n/n8n-nodes-langchain.toolCode",
       "typeVersion": 1.1,
       "position": [
-        -272,
+        -210,
         4240
       ],
       "id": "97bd0748-3dfc-4a4d-83fc-637482d0aafa",
@@ -1305,8 +1305,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        112,
-        3936
+        160,
+        3940
       ],
       "id": "506c2677-8498-4011-8454-6f70d7a0ed0a",
       "name": "FallBack4",
@@ -1331,7 +1331,7 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        80,
+        160,
         4240
       ],
       "id": "30daa9f0-1f46-4e72-98c9-33843494e5dd",
@@ -1362,7 +1362,7 @@
       "type": "@n8n/n8n-nodes-langchain.toolCode",
       "typeVersion": 1.1,
       "position": [
-        272,
+        460,
         4240
       ],
       "id": "663ce884-3ddc-44cc-8083-6c0a458575ab",
@@ -1384,8 +1384,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        720,
-        3936
+        840,
+        3940
       ],
       "id": "dbd814ab-2a45-495f-b678-cb9a4654dc0f",
       "name": "Parse & Validate A4",
@@ -1402,14 +1402,14 @@
     {
       "parameters": {
         "content": "## ROW 07 : DPDP Compliance Mapping (Agent 5)\n- Native n8n AI Agent (`@n8n/n8n-nodes-langchain.agent`) + `Gemini Main Model: A5` + `FallBack5` (`OpenRouter Fallback Model: A5`)\n- Queries the authoritative PostgreSQL catalogue via FastAPI (`GET /api/v1/catalogue/dpdp`)",
-        "height": 720,
-        "width": 2280
+        "height": 580,
+        "width": 1732
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -656,
-        4560
+        -572,
+        4620
       ],
       "id": "c722675e-dce4-4152-aaec-eed6ae203044",
       "name": "Sticky: 07 DPDP Compliance Mapping",
@@ -1434,8 +1434,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        -432,
-        4720
+        -512,
+        4740
       ],
       "id": "19874bcb-5cb2-4f66-baf3-7d211c078e99",
       "name": "Agent 5: DPDP Compliance Mapping",
@@ -1460,8 +1460,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.2,
       "position": [
-        -464,
-        5008
+        -512,
+        5040
       ],
       "id": "3c17b433-d4ee-4f7e-b4fe-87f9cb9ecc3e",
       "name": "Gemini Main Model: A5",
@@ -1491,8 +1491,8 @@
       "type": "@n8n/n8n-nodes-langchain.toolCode",
       "typeVersion": 1.1,
       "position": [
-        -272,
-        5008
+        -210,
+        5040
       ],
       "id": "ee9a478f-1ae7-4f8d-a337-cbb41172f7cd",
       "name": "Tool: Retrieve DPDP Requirements",
@@ -1517,8 +1517,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        112,
-        4720
+        160,
+        4740
       ],
       "id": "e342b3c8-d2fe-454e-a32d-40a3c81df972",
       "name": "FallBack5",
@@ -1543,8 +1543,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        80,
-        5008
+        160,
+        5040
       ],
       "id": "b6799574-2b7b-45e2-aad6-530490dc5739",
       "name": "OpenRouter Fallback Model: A5",
@@ -1574,8 +1574,8 @@
       "type": "@n8n/n8n-nodes-langchain.toolCode",
       "typeVersion": 1.1,
       "position": [
-        272,
-        5008
+        460,
+        5040
       ],
       "id": "a8bb6e14-4a8c-4bc6-ad56-06d684e46bb1",
       "name": "Tool: Retrieve DPDP Requirements1",
@@ -1596,8 +1596,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        720,
-        4720
+        840,
+        4740
       ],
       "id": "79746a2d-2516-4350-85cf-d7f0e9c71b26",
       "name": "Parse & Validate A5",
@@ -1614,15 +1614,15 @@
     {
       "parameters": {
         "content": "## ROW 08 : Risk Assessment (Agent 6: Risk & Gap Agent)\n- Native n8n AI Agent (`@n8n/n8n-nodes-langchain.agent`) + `Gemini Main Model: A6` + `FallBack6` (`OpenRouter Fallback Model: A6`)\n- Produces structured privacy risks (`RSK-001`...) and receives targeted A6 QA/Human correction instructions",
-        "height": 720,
-        "width": 2280,
+        "height": 580,
+        "width": 1132,
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -656,
-        5328
+        -572,
+        5400
       ],
       "id": "aec84aa6-0bc8-471a-a018-a4266b98dcbb",
       "name": "Sticky: 08 Risk Assessment",
@@ -1647,8 +1647,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        -432,
-        5488
+        -512,
+        5520
       ],
       "id": "0866a96e-657b-47b6-a805-2942dfe786cb",
       "name": "Agent 6: Risk & Gap Assessment",
@@ -1671,8 +1671,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.2,
       "position": [
-        -432,
-        5792
+        -512,
+        5820
       ],
       "id": "fa470698-b07e-483d-98bf-93788184207f",
       "name": "Gemini Main Model: A6",
@@ -1704,8 +1704,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        112,
-        5488
+        -140,
+        5520
       ],
       "id": "e518d306-8c87-477b-ab36-3324c52a0948",
       "name": "FallBack6",
@@ -1730,8 +1730,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        112,
-        5792
+        -140,
+        5820
       ],
       "id": "ba914f56-39e1-4277-8b08-c569424d02f5",
       "name": "OpenRouter Fallback Model: A6",
@@ -1759,8 +1759,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        720,
-        5488
+        240,
+        5520
       ],
       "id": "d14cf9ff-846f-4bc2-bade-232782e60b01",
       "name": "Parse & Validate A6",
@@ -1777,15 +1777,15 @@
     {
       "parameters": {
         "content": "## ROW 09 : QA and Self-Correction (Agent 7 + Postgres Counter + Targeted Router)\n- **Agent 7**: Audits A1..A6 package via `Tool: Cross-Verify Package`\n- **Targeted Router**: `Switch: Route QA Revision` routes directly to the earliest targeted specialist agent (`A3`, `A4`, `A5`, or `A6`)\n- **PostgreSQL State**: Reads & increments `qa_attempts` in PostgreSQL `job_state` (max 2 revisions)",
-        "height": 760,
-        "width": 2280,
+        "height": 680,
+        "width": 3172,
         "color": 2
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -656,
-        6112
+        -572,
+        6060
       ],
       "id": "17b55774-024e-4ca2-8395-b62a2f08dcae",
       "name": "Sticky: 09 QA and Self-Correction",
@@ -1810,8 +1810,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        -480,
-        6272
+        -512,
+        6280
       ],
       "id": "be60d339-928a-420d-bd6b-b6303597e26c",
       "name": "Agent 7: QA & Evidence Review",
@@ -1835,7 +1835,7 @@
       "typeVersion": 1.2,
       "position": [
         -512,
-        6576
+        6580
       ],
       "id": "1bdab57c-0ce2-40de-b0dd-9ec68ce08e84",
       "name": "Gemini Main Model: A7",
@@ -1865,8 +1865,8 @@
       "type": "@n8n/n8n-nodes-langchain.toolCode",
       "typeVersion": 1.1,
       "position": [
-        -320,
-        6576
+        -210,
+        6580
       ],
       "id": "b52610f1-2e8a-4fde-aaef-d3d899c7012e",
       "name": "Tool: Cross-Verify Package",
@@ -1891,8 +1891,8 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        -64,
-        6272
+        160,
+        6280
       ],
       "id": "230cbe84-1456-4420-8cc0-e6e8c104af8c",
       "name": "FallBack7",
@@ -1917,8 +1917,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        -80,
-        6576
+        160,
+        6580
       ],
       "id": "d8316a00-4fe1-4be5-beea-cd840ea51f22",
       "name": "OpenRouter Fallback Model: A7",
@@ -1948,8 +1948,8 @@
       "type": "@n8n/n8n-nodes-langchain.toolCode",
       "typeVersion": 1.1,
       "position": [
-        96,
-        6576
+        460,
+        6580
       ],
       "id": "d07fa7c1-d548-4afc-8414-7faf210f3e03",
       "name": "Tool: Cross-Verify Package1",
@@ -1974,8 +1974,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        336,
-        6272
+        840,
+        6280
       ],
       "id": "8ee4c297-a22b-4c5e-a263-23c06b56ff4d",
       "name": "Postgres: Read Job State (QA)",
@@ -2003,8 +2003,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        592,
-        6272
+        1200,
+        6280
       ],
       "id": "dbcd325d-0d0b-42f8-9b3e-b34bc64cf23a",
       "name": "Parse & Validate A7 (QA Gate)",
@@ -2046,8 +2046,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        848,
-        6272
+        1560,
+        6280
       ],
       "id": "7d64ea9b-9733-49dd-89f7-4b84abfda41d",
       "name": "IF: QA Needs Retry (<2)?",
@@ -2072,8 +2072,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        1120,
-        6192
+        1920,
+        6180
       ],
       "id": "ab2978e0-372c-4a11-bab5-8b3708c1790e",
       "name": "Postgres: Increment QA Attempts",
@@ -2101,8 +2101,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        1376,
-        6192
+        2280,
+        6180
       ],
       "id": "8517878a-cd2d-489c-ba32-cb8b4d554d56",
       "name": "Prepare QA Self-Correction",
@@ -2223,8 +2223,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        1392,
-        6592
+        1920,
+        6580
       ],
       "id": "38136da5-28c4-411c-8899-0268446dd4aa",
       "name": "Switch: Route QA Revision",
@@ -2241,15 +2241,15 @@
     {
       "parameters": {
         "content": "## ROW 09B : Deterministic Mermaid DFD Generation\n- Generates both **Level 0 (Context DFD)** and **Level 1 (Detailed System/Department DFD)** deterministically from validated `Agent 4` graph JSON in a single step",
-        "height": 420,
-        "width": 2280,
+        "height": 280,
+        "width": 380,
         "color": 3
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -656,
-        6928
+        -444,
+        7000
       ],
       "id": "a93050d0-1ed4-42c2-be8d-d87eda6609eb",
       "name": "Sticky: 06B Mermaid Generation",
@@ -2288,15 +2288,15 @@
     {
       "parameters": {
         "content": "## ROW 10 : Human Approval Gate (AI Briefing Agent 8 + Attached Review `.doc` with Phrased/Masked/SQL + Native IF Routing)\n- **`Agent 8: Pre-Approval Briefing`** (`Gemini Main Model: A8` + `FallBack8` OpenRouter): Writes an executive briefing of what the document is about, what was phrased, and what was masked\n- **`Build Pre-Approval Review Doc & SQL Attachment`**: Creates an attached MS Word (`.doc`) file containing all phrased tables, masked token audit, and job-specific PostgreSQL commands\n- **`Gmail: Send Approval Questionnaire`**: Emails the attached `.doc` + clickable Yes/No questionnaire link to **`dpo-compliance@dpdp-enterprise.internal`**",
-        "height": 820,
-        "width": 2280,
+        "height": 660,
+        "width": 3412,
         "color": 6
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -656,
-        7408
+        -572,
+        7480
       ],
       "id": "67f338fc-7966-47ab-b850-24286ed794a9",
       "name": "Sticky: 10 Human Approval",
@@ -2321,7 +2321,7 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 1.7,
       "position": [
-        -560,
+        -512,
         7600
       ],
       "id": "af542000-4a55-448b-91e6-5fa1a9173ada",
@@ -2345,8 +2345,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
       "typeVersion": 1.2,
       "position": [
-        -560,
-        7904
+        -512,
+        7920
       ],
       "id": "49edc26b-6635-479e-b940-b6b1ef88638f",
       "name": "Gemini Main Model: A8",
@@ -2378,7 +2378,7 @@
       "type": "@n8n/n8n-nodes-langchain.agent",
       "typeVersion": 3.1,
       "position": [
-        -304,
+        -140,
         7600
       ],
       "id": "2de3ddcf-b8c3-4367-932a-f9919f0b044b",
@@ -2404,8 +2404,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatOpenRouter",
       "typeVersion": 1,
       "position": [
-        -304,
-        7904
+        -140,
+        7920
       ],
       "id": "8440bb40-d797-4ea9-b485-ed2d54286dd0",
       "name": "OpenRouter Fallback Model: A8",
@@ -2433,7 +2433,7 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -48,
+        240,
         7600
       ],
       "id": "7a8fdcb6-daf0-406e-9d6c-052f8e1d2a0e",
@@ -2467,7 +2467,7 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        208,
+        620,
         7600
       ],
       "id": "81f7ef38-f952-4878-8c4e-783af41b4aeb",
@@ -2554,7 +2554,7 @@
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
       "position": [
-        448,
+        1000,
         7600
       ],
       "id": "644b47c2-4452-4dd5-a2e1-38ade4796054",
@@ -2581,8 +2581,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        704,
-        7984
+        1380,
+        7980
       ],
       "id": "9f0c4f53-82d7-4303-a7da-00208690e6a3",
       "name": "Postgres: Record Approval Audit",
@@ -2631,7 +2631,7 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        704,
+        1380,
         7600
       ],
       "id": "ccc23d67-1dfd-4f74-893b-a474589da30c",
@@ -2673,8 +2673,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        960,
-        7648
+        1760,
+        7600
       ],
       "id": "4eeeb435-5e1d-4df0-ad67-b1f89b6ed48b",
       "name": "IF: Rejected (Terminal)?",
@@ -2699,7 +2699,7 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        1216,
+        2140,
         7600
       ],
       "id": "52821a2d-00fb-4251-b8e0-6d7d32c3ee8b",
@@ -2732,8 +2732,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        1216,
-        7920
+        1760,
+        7980
       ],
       "id": "0bf2ae78-fe1e-44b3-8cf8-c88c3363de31",
       "name": "Postgres: Increment Human Attempts",
@@ -2781,8 +2781,8 @@
       "type": "n8n-nodes-base.if",
       "typeVersion": 2.2,
       "position": [
-        1440,
-        7920
+        2140,
+        7980
       ],
       "id": "80adba3b-c31b-4d4c-8dec-ffb2be3b5e07",
       "name": "IF: Human Attempts <= 2?",
@@ -2903,8 +2903,8 @@
       "type": "n8n-nodes-base.switch",
       "typeVersion": 3.2,
       "position": [
-        1680,
-        7648
+        2520,
+        7600
       ],
       "id": "068f45f7-e0bf-46ed-8393-51ee5a1ae323",
       "name": "Switch: Route Human Revision",
@@ -2925,8 +2925,8 @@
       "type": "n8n-nodes-base.stopAndError",
       "typeVersion": 1,
       "position": [
-        1680,
-        8016
+        2520,
+        7980
       ],
       "id": "004620a6-6936-4dac-8208-188342c130b5",
       "name": "Stop and Error: Max Human Revisions",
@@ -2943,15 +2943,15 @@
     {
       "parameters": {
         "content": "## ROW 11 : Reporting, Persistence & Final Confirmation Mail with Attached Files\n- Consolidates all approved deliverables and marks activities `'human_approved'` ONLY after passing the Human Approval Gate\n- Calls FastAPI `POST /api/v1/export` to persist all structured records in PostgreSQL and generate reports\n- **`Prepare Final Confirmation Attachments`** + **`Gmail: Send Final Confirmation & Reports`**: Sends the final completion confirmation email to `dpo-compliance@dpdp-enterprise.internal` with the final Word Report (`.doc`), RoPA (`.csv`), and Consolidated Package (`.json`) attached",
-        "height": 560,
-        "width": 2280,
+        "height": 280,
+        "width": 1892,
         "color": 7
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -656,
-        8240
+        -572,
+        8380
       ],
       "id": "65b99a84-cb87-401b-8f19-1c83fc269e4e",
       "name": "Sticky: 11 Reporting and Persistence",
@@ -2972,8 +2972,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -480,
-        8448
+        -512,
+        8500
       ],
       "id": "05ef20aa-f894-4e1d-b17a-4a232ad5e376",
       "name": "Build Approved Consolidated Package",
@@ -3003,8 +3003,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        -128,
-        8448
+        -140,
+        8500
       ],
       "id": "2ea80ed4-9a8f-4d44-b490-6a2d3b973b4b",
       "name": "FastAPI: Persist & Generate All Reports",
@@ -3039,8 +3039,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        224,
-        8448
+        240,
+        8500
       ],
       "id": "21c90ff3-5d37-4867-91d2-d3bfa8f058a6",
       "name": "Postgres: Audit Job Completed",
@@ -3068,8 +3068,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        560,
-        8448
+        620,
+        8500
       ],
       "id": "81ac7396-183b-4f99-9860-32000fe008eb",
       "name": "Prepare Final Confirmation Attachments",
@@ -3102,8 +3102,8 @@
       "type": "n8n-nodes-base.gmail",
       "typeVersion": 2.1,
       "position": [
-        880,
-        8448
+        1000,
+        8500
       ],
       "id": "5eff1c0c-6295-4769-b94e-12de5388f948",
       "name": "Gmail: Send Final Confirmation & Reports",
@@ -3129,15 +3129,15 @@
     {
       "parameters": {
         "content": "## ROW 12 : Error Handling\n- Captures workflow-level, extraction, validation, rendering, or agent failures\n- Sanitizes error messages (never leaks API keys or raw PII) and persists error state to PostgreSQL `job_state` & `audit_events` via both FastAPI and direct Postgres nodes",
-        "height": 540,
-        "width": 2280,
+        "height": 520,
+        "width": 1132,
         "color": 7
       },
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
       "position": [
-        -656,
-        8848
+        -572,
+        8840
       ],
       "id": "a82ecb7d-4f5a-4144-8d0e-ae562644d210",
       "name": "Sticky: 12 Error Handling",
@@ -3156,8 +3156,8 @@
       "type": "n8n-nodes-base.errorTrigger",
       "typeVersion": 1,
       "position": [
-        -432,
-        9072
+        -512,
+        9080
       ],
       "id": "219574bc-3a98-47a6-b5ca-5f24230d1045",
       "name": "Error Trigger",
@@ -3178,8 +3178,8 @@
       "type": "n8n-nodes-base.code",
       "typeVersion": 2,
       "position": [
-        -80,
-        9072
+        -140,
+        9080
       ],
       "id": "fc9079cf-0c20-42f9-a615-eb2023205006",
       "name": "Format & Sanitize Error",
@@ -3209,8 +3209,8 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        320,
-        8992
+        240,
+        8960
       ],
       "id": "8acf31f6-19e2-4bae-ae63-33f12fd587f5",
       "name": "FastAPI: Report Job Error",
@@ -3243,8 +3243,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.5,
       "position": [
-        320,
-        9168
+        240,
+        9200
       ],
       "id": "2f3475c4-c0f3-4ed8-894c-235cf3154080",
       "name": "Postgres: Audit Workflow Error",

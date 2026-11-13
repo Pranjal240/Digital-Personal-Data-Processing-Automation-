@@ -20,7 +20,8 @@ import {
   Layers,
   ChevronRight,
   Pin,
-  PinOff
+  PinOff,
+  Navigation
 } from 'lucide-react'
 import { cn } from '../../lib/utils'
 import type { AgentInfo, StageInfo, NodeCategory } from '../../types/workflow'
@@ -130,7 +131,7 @@ export const FramerSidebar: React.FC<FramerSidebarProps> = ({
           'bg-white/95 dark:bg-neutral-900/95 border-slate-200 dark:border-neutral-800 backdrop-blur-xl'
         )}
         animate={{
-          width: isExpanded ? '300px' : '64px',
+          width: isExpanded ? '340px' : '64px',
         }}
         transition={{
           duration: 0.25,
@@ -154,7 +155,7 @@ export const FramerSidebar: React.FC<FramerSidebarProps> = ({
                 <span className="text-xs font-bold text-slate-800 dark:text-neutral-100 uppercase tracking-wider block truncate">
                   Workflow Index
                 </span>
-                <span className="text-[10px] text-slate-500 dark:text-neutral-400 block font-mono">
+                <span className="text-[10px] text-slate-500 dark:text-neutral-400 font-mono block">
                   106 Production Nodes
                 </span>
               </motion.div>
@@ -167,48 +168,40 @@ export const FramerSidebar: React.FC<FramerSidebarProps> = ({
               className={cn(
                 'p-1.5 rounded-md text-xs transition',
                 isPinned
-                  ? 'bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300'
+                  ? 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 font-semibold'
                   : 'text-slate-400 hover:text-slate-700 dark:hover:text-neutral-200'
               )}
-              title={isPinned ? 'Unpin Sidebar (Auto-collapse)' : 'Pin Sidebar Open'}
+              title={isPinned ? 'Unpin sidebar rail' : 'Pin sidebar expanded'}
             >
-              {isPinned ? <Pin className="w-3.5 h-3.5 fill-current" /> : <PinOff className="w-3.5 h-3.5" />}
+              {isPinned ? <PinOff className="w-3.5 h-3.5" /> : <Pin className="w-3.5 h-3.5" />}
             </button>
           )}
         </div>
 
-        {/* Search Bar */}
+        {/* Search input (visible only when expanded) */}
         {isExpanded && (
-          <div className="p-3 pb-1 border-b border-slate-100 dark:border-neutral-800/60">
+          <div className="p-3 border-b border-slate-200 dark:border-neutral-800">
             <div className="relative">
-              <Search className="w-3.5 h-3.5 text-slate-400 dark:text-neutral-500 absolute left-2.5 top-1/2 -translate-y-1/2" />
+              <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-neutral-500" />
               <input
                 type="text"
+                placeholder="Search nodes, tools, prompts..."
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
-                placeholder="Search nodes, tools, prompts..."
-                className="w-full bg-slate-50 dark:bg-neutral-950 border border-slate-200 dark:border-neutral-800 rounded-lg pl-8 pr-7 py-1.5 text-xs text-slate-800 dark:text-neutral-200 placeholder-slate-400 dark:placeholder-neutral-500 focus:outline-none focus:border-indigo-500 transition"
+                className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-slate-200 dark:border-neutral-700 bg-slate-50 dark:bg-neutral-800 text-xs text-slate-800 dark:text-neutral-200 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
               />
-              {searchQuery && (
-                <button
-                  onClick={() => onSearchChange('')}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-neutral-300"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              )}
             </div>
           </div>
         )}
 
         {/* Scrollable Navigation Body */}
-        <div className="flex-1 overflow-y-auto p-2 space-y-4 text-xs">
-          {/* Node Category Filters */}
+        <div className="flex-1 overflow-y-auto px-2 py-3 space-y-5">
+          {/* Category Filter Icons/Buttons */}
           <div>
             {isExpanded && (
-              <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-neutral-500 px-2 mb-1">
-                Categories
-              </h4>
+              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-neutral-500 px-2 block mb-1">
+                Filter by Category
+              </span>
             )}
             <div className="space-y-0.5">
               {categoryFilters.map((cat) => {
@@ -216,27 +209,25 @@ export const FramerSidebar: React.FC<FramerSidebarProps> = ({
                 return (
                   <button
                     key={cat.id}
-                    onClick={() => onSelectCategory(cat.id)}
+                    onClick={() => onSelectCategory(isActive ? 'all' : cat.id)}
                     className={cn(
-                      'w-full flex items-center rounded-lg transition py-1.5 px-2 text-left',
-                      isExpanded ? 'justify-between' : 'justify-center',
+                      'w-full flex items-center rounded-lg transition group',
+                      isExpanded ? 'justify-between px-2.5 py-1.5 text-xs' : 'justify-center p-2',
                       isActive
-                        ? 'bg-indigo-600 text-white font-medium shadow-sm'
-                        : 'text-slate-600 dark:text-neutral-400 hover:text-slate-900 dark:hover:text-neutral-100 hover:bg-slate-100 dark:hover:bg-neutral-800/60'
+                        ? 'bg-indigo-600 text-white shadow-sm font-medium'
+                        : 'text-slate-600 dark:text-neutral-400 hover:bg-slate-100 dark:hover:bg-neutral-800/60 hover:text-slate-900 dark:hover:text-neutral-200'
                     )}
                     title={!isExpanded ? `${cat.label} (${cat.countLabel})` : undefined}
                   >
-                    <div className="flex items-center gap-2.5 truncate">
-                      <span className={isActive ? 'text-white' : ''}>{cat.icon}</span>
-                      {isExpanded && <span className="truncate">{cat.label}</span>}
+                    <div className="flex items-center gap-2.5">
+                      {cat.icon}
+                      {isExpanded && <span>{cat.label}</span>}
                     </div>
                     {isExpanded && (
                       <span
                         className={cn(
                           'text-[10px] font-mono px-1.5 py-0.2 rounded',
-                          isActive
-                            ? 'bg-indigo-700/80 text-white'
-                            : 'bg-slate-100 dark:bg-neutral-800 text-slate-500 dark:text-neutral-400'
+                          isActive ? 'bg-indigo-700 text-indigo-100' : 'bg-slate-100 dark:bg-neutral-800 text-slate-500 dark:text-neutral-400'
                         )}
                       >
                         {cat.countLabel}
@@ -248,14 +239,14 @@ export const FramerSidebar: React.FC<FramerSidebarProps> = ({
             </div>
           </div>
 
-          {/* AI Agents A0-A8 Section */}
+          {/* A0–A8 Agents Quick List */}
           <div>
             {isExpanded ? (
-              <div className="flex items-center justify-between px-2 mb-1.5">
-                <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-neutral-500">
-                  Specialized Agents (A0–A8)
-                </h4>
-                <span className="text-[10px] font-mono text-indigo-600 dark:text-indigo-400 font-semibold">9 Agents</span>
+              <div className="flex items-center justify-between px-2 mb-1">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-neutral-500">
+                  Specialist Agents (A0–A8)
+                </span>
+                <span className="text-[10px] font-mono text-indigo-600 dark:text-indigo-400">9 Active</span>
               </div>
             ) : (
               <div className="w-full flex justify-center py-1">
@@ -299,45 +290,80 @@ export const FramerSidebar: React.FC<FramerSidebarProps> = ({
             </div>
           </div>
 
-          {/* 12 Stages Index */}
+          {/* 12 Stages Index With Complete Descriptions */}
           {isExpanded && (
             <div>
               <div className="flex items-center justify-between px-2 mb-1.5">
                 <h4 className="text-[10px] font-bold uppercase tracking-wider text-slate-400 dark:text-neutral-500">
-                  Workflow Stages (12)
+                  Workflow Stages (12 Rows)
                 </h4>
                 {activeStageId && (
                   <button
                     onClick={() => onSelectStage(null)}
                     className="text-[10px] text-indigo-600 dark:text-indigo-400 hover:underline font-semibold"
                   >
-                    Reset
+                    Clear Filter
                   </button>
                 )}
               </div>
 
-              <div className="space-y-1">
+              <div className="space-y-2">
                 {stages.map((stg) => {
                   const isSelected = activeStageId === stg.id
                   return (
-                    <button
+                    <div
                       key={stg.id}
                       onClick={() => onSelectStage(isSelected ? null : stg.id)}
                       className={cn(
-                        'w-full text-left p-1.5 rounded-lg border transition text-xs',
+                        'w-full text-left p-2.5 rounded-xl border transition cursor-pointer text-xs group',
                         isSelected
-                          ? 'border-indigo-500 bg-indigo-50 dark:bg-indigo-950/40 text-indigo-950 dark:text-white font-medium'
-                          : 'border-slate-200/60 dark:border-neutral-800/60 text-slate-600 dark:text-neutral-400 hover:border-slate-300 dark:hover:border-neutral-700'
+                          ? 'border-indigo-500 bg-indigo-50/80 dark:bg-indigo-950/40 text-slate-900 dark:text-white shadow-sm ring-1 ring-indigo-400'
+                          : 'border-slate-200 dark:border-neutral-800 bg-slate-50/50 dark:bg-neutral-900/40 text-slate-700 dark:text-neutral-300 hover:border-slate-300 dark:hover:border-neutral-700 hover:bg-slate-100/60 dark:hover:bg-neutral-800/40'
                       )}
                     >
                       <div className="flex items-center justify-between font-mono text-[10px]">
-                        <span className="font-semibold text-indigo-600 dark:text-indigo-400">{stg.row}</span>
-                        <ChevronRight className="w-3 h-3 text-slate-400 dark:text-neutral-600" />
+                        <span className={cn(
+                          'font-bold px-1.5 py-0.5 rounded',
+                          isSelected
+                            ? 'bg-indigo-600 text-white'
+                            : 'bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-400'
+                        )}>
+                          {stg.row}
+                        </span>
+                        <span className="text-[10px] text-indigo-600 dark:text-indigo-400 font-semibold flex items-center gap-1">
+                          <Navigation className="w-3 h-3" />
+                          <span>{isSelected ? 'Focused' : 'Focus'}</span>
+                        </span>
                       </div>
-                      <div className="truncate text-slate-800 dark:text-neutral-200 mt-0.5">
+                      <div className="font-bold text-slate-900 dark:text-neutral-100 mt-1.5 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
                         {stg.title}
                       </div>
-                    </button>
+                      {/* Detailed stage description */}
+                      <p className={cn(
+                        'text-[11px] text-slate-600 dark:text-neutral-400 mt-1 leading-relaxed',
+                        !isSelected && 'line-clamp-2'
+                      )}>
+                        {stg.description}
+                      </p>
+                      {/* Technologies used in this row */}
+                      {stg.technologies && (
+                        <div className="mt-2 pt-1.5 border-t border-slate-200 dark:border-neutral-800 flex flex-wrap gap-1">
+                          {stg.technologies.slice(0, isSelected ? undefined : 3).map((t, idx) => (
+                            <span
+                              key={idx}
+                              className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-white dark:bg-neutral-800 text-slate-600 dark:text-neutral-300 border border-slate-200 dark:border-neutral-700"
+                            >
+                              {t}
+                            </span>
+                          ))}
+                          {!isSelected && stg.technologies.length > 3 && (
+                            <span className="text-[9px] font-mono text-slate-400">
+                              +{stg.technologies.length - 3}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                    </div>
                   )
                 })}
               </div>
@@ -415,6 +441,27 @@ export const FramerSidebar: React.FC<FramerSidebarProps> = ({
                       <span className="font-bold">{ag.id}: {ag.name}</span>
                       <span className="text-[10px] text-slate-400">{ag.stageId}</span>
                     </button>
+                  ))}
+                </div>
+
+                <div className="space-y-2">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Workflow Stages (12)</span>
+                  {stages.map((stg) => (
+                    <div
+                      key={stg.id}
+                      onClick={() => {
+                        onSelectStage(stg.id)
+                        setOpen(false)
+                      }}
+                      className="p-2.5 rounded-lg border border-slate-200 dark:border-neutral-800 text-xs cursor-pointer"
+                    >
+                      <div className="flex items-center justify-between font-mono text-[10px]">
+                        <span className="font-bold text-indigo-600 dark:text-indigo-400">{stg.row}</span>
+                        <ChevronRight className="w-3.5 h-3.5 text-slate-400" />
+                      </div>
+                      <div className="font-bold text-slate-900 dark:text-neutral-100 mt-0.5">{stg.title}</div>
+                      <p className="text-[11px] text-slate-600 dark:text-neutral-400 mt-0.5 line-clamp-2">{stg.description}</p>
+                    </div>
                   ))}
                 </div>
               </div>
