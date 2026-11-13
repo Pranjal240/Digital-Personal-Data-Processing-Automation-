@@ -1,0 +1,8 @@
+To run the sever
+python -m uvicorn main:app --reload --host 127.0.0.1 --port 8000 --env-file .env
+
+Setting	Meaning
+127.0.0.1	Accepts connections only through Windows localhost
+0.0.0.0	Accepts connections through available network interfaces
+
+python -m uvicorn main:app --reload --host 0.0.0.0 --port 8000 --env-file .env

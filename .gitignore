@@ -1,0 +1,34 @@
+# Secrets & Environment Variables (STRICTLY AIR-GAPPED)
+.env
+*.env
+backend/.env
+backend/.env.*
+*.key
+*.pem
+
+# Python Virtual Environments & Caches
+venv/
+.venv/
+backend/venv/
+__pycache__/
+*/__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist-info/
+
+# Local Runtime Job Exports & Temporary Artifacts
+backend/exports/
+*.log
+
+# Node & Package Managers
+node_modules/
+public-workflow-explorer/node_modules/
+.npm
+npm-debug.log*
+
+# System & IDE artifacts
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/

@@ -1,0 +1,47 @@
+{
+  "totalNodes": 106,
+  "operationalNodes": 91,
+  "stickyNoteSections": 15,
+  "totalConnections": 119,
+  "connectionsByType": {
+    "main": 77,
+    "ai_languageModel": 18,
+    "ai_memory": 2,
+    "ai_tool": 22
+  },
+  "agents": {
+    "primaryAgents": 9,
+    "fallbackAgents": 9,
+    "totalAgentNodes": 18
+  },
+  "models": {
+    "geminiNodes": 9,
+    "openRouterNodes": 9,
+    "totalModelNodes": 18
+  },
+  "tools": {
+    "totalToolNodes": 9,
+    "toolTypes": [
+      "retrieve_document_metadata",
+      "search_evidence (shared)",
+      "retrieve_processing_activities",
+      "retrieve_dpdp_requirements_catalogue",
+      "cross_verify_package"
+    ]
+  },
+  "integrations": [
+    "FastAPI Document & Export Engine",
+    "PostgreSQL 15+ Enterprise Database",
+    "Google Gemini PaLM API",
+    "OpenRouter Multi-Model Gateway",
+    "Gmail OAuth2 API",
+    "n8n Self-Hosted Automation Engine"
+  ],
+  "databaseNodes": 9,
+  "httpNodes": 3,
+  "codeNodes": 17,
+  "ifSwitchNodes": 7,
+  "emailNodes": 2,
+  "triggerNodes": 2,
+  "stagesCount": 13
+}

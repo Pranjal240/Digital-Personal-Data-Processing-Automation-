@@ -1,0 +1,76 @@
+-- 03_seed_dpdp_catalogue.sql
+-- Technical starter catalogue only. Not legal advice or a complete legal register.
+-- Uses DO NOTHING so reviewed catalogue text is never silently overwritten.
+BEGIN;
+INSERT INTO dpdp_requirements
+(requirement_id,catalogue_version,legal_instrument,provision_reference,title,
+ requirement_description,requirement_type,applicability_conditions,effective_date,
+ source_url,source_publication_date,last_verified_date,status,
+ requires_legal_verification,verification_note)
+VALUES
+('DPDP-SEC-04','2023.1','Digital Personal Data Protection Act, 2023 (No. 22 of 2023)','Section 4','Grounds for processing',
+ 'Processing of digital personal data must be for a lawful purpose and on a permitted ground under the Act.',
+ 'statutory_obligation','Assess the Act scope and the applicable permitted ground for each processing purpose.',
+ NULL,'https://www.meity.gov.in/','2023-08-11',NULL,'pending_commencement_notification',true,
+ 'Starter summary. Verify enacted text, commencement notifications and current rules with counsel.'),
+('DPDP-SEC-05','2023.1','Digital Personal Data Protection Act, 2023 (No. 22 of 2023)','Section 5','Notice',
+ 'Provide the notice particulars required by the Act where consent is sought.',
+ 'statutory_obligation','Assess where consent is the applicable processing ground.',
+ NULL,'https://www.meity.gov.in/','2023-08-11',NULL,'pending_commencement_notification',true,
+ 'Starter summary. Verify current notice requirements and applicable rules with counsel.'),
+('DPDP-SEC-06','2023.1','Digital Personal Data Protection Act, 2023 (No. 22 of 2023)','Section 6','Consent',
+ 'Consent must meet the statutory standards and be capable of withdrawal as provided by the Act.',
+ 'statutory_obligation','Assess consent-based processing.',
+ NULL,'https://www.meity.gov.in/','2023-08-11',NULL,'pending_commencement_notification',true,
+ 'Starter summary. Verify current text and commencement with counsel.'),
+('DPDP-SEC-07','2023.1','Digital Personal Data Protection Act, 2023 (No. 22 of 2023)','Section 7','Certain legitimate uses',
+ 'Assess whether processing without consent falls within a specified legitimate use under the Act.',
+ 'statutory_obligation','Only where the organisation relies on a Section 7 ground.',
+ NULL,'https://www.meity.gov.in/','2023-08-11',NULL,'pending_commencement_notification',true,
+ 'Fact-specific legal determination required.'),
+('DPDP-SEC-08-2','2023.1','Digital Personal Data Protection Act, 2023 (No. 22 of 2023)','Section 8(2)','Data processor engagement',
+ 'Assess Data Fiduciary responsibility and the requirement for a valid contract when engaging a Data Processor.',
+ 'statutory_obligation','Where a processor is engaged on behalf of a Data Fiduciary.',
+ NULL,'https://www.meity.gov.in/','2023-08-11',NULL,'pending_commencement_notification',true,
+ 'Review actual contracts and applicable commencement with counsel.'),
+('DPDP-SEC-08-5','2023.1','Digital Personal Data Protection Act, 2023 (No. 22 of 2023)','Section 8(4)-(5)','Security safeguards',
+ 'Assess appropriate technical and organisational measures and reasonable security safeguards.',
+ 'statutory_obligation','Assess processing under the control of a Data Fiduciary.',
+ NULL,'https://www.meity.gov.in/','2023-08-11',NULL,'pending_commencement_notification',true,
+ 'Do not infer control effectiveness from policy text alone.'),
+('DPDP-SEC-08-6','2023.1','Digital Personal Data Protection Act, 2023 (No. 22 of 2023)','Section 8(6)','Personal data breach intimation',
+ 'Assess the breach intimation obligations and prescribed manner.',
+ 'statutory_obligation','Relevant when a personal data breach occurs.',
+ NULL,'https://www.meity.gov.in/','2023-08-11',NULL,'pending_commencement_notification',true,
+ 'Verify applicable rules, forms and timelines with counsel.'),
+('DPDP-SEC-08-7','2023.1','Digital Personal Data Protection Act, 2023 (No. 22 of 2023)','Section 8(7)-(8)','Erasure and retention',
+ 'Assess erasure when the specified purpose is no longer served or consent is withdrawn, subject to legal retention requirements.',
+ 'statutory_obligation','Assess data lifecycle, purpose completion and legal retention exceptions.',
+ NULL,'https://www.meity.gov.in/','2023-08-11',NULL,'pending_commencement_notification',true,
+ 'Check sectoral retention laws and applicable rules.'),
+('DPDP-SEC-09','2023.1','Digital Personal Data Protection Act, 2023 (No. 22 of 2023)','Section 9','Children personal data',
+ 'Assess the special obligations for processing personal data of children and persons with disability having lawful guardians.',
+ 'statutory_obligation','Where relevant Data Principals fall within the statutory categories.',
+ NULL,'https://www.meity.gov.in/','2023-08-11',NULL,'pending_commencement_notification',true,
+ 'Verify exemptions and prescribed manner with counsel.'),
+('DPDP-SEC-10','2023.1','Digital Personal Data Protection Act, 2023 (No. 22 of 2023)','Section 10','Significant Data Fiduciary',
+ 'Assess additional obligations if the organisation is notified as a Significant Data Fiduciary.',
+ 'statutory_obligation','Only if designated/notified as an SDF.',
+ NULL,'https://www.meity.gov.in/','2023-08-11',NULL,'pending_commencement_notification',true,
+ 'Do not infer SDF status; verify notifications.'),
+('DPDP-SEC-11-14','2023.1','Digital Personal Data Protection Act, 2023 (No. 22 of 2023)','Sections 11-14','Data Principal rights',
+ 'Assess the statutory rights and grievance redressal mechanisms described in Sections 11 to 14.',
+ 'statutory_obligation','Assess applicable Data Principal requests and organisational processes.',
+ NULL,'https://www.meity.gov.in/','2023-08-11',NULL,'pending_commencement_notification',true,
+ 'Grouped starter entry; split into individual provisions before production legal mapping.'),
+('DPDP-SEC-16','2023.1','Digital Personal Data Protection Act, 2023 (No. 22 of 2023)','Section 16','Transfers outside India',
+ 'Assess restrictions notified by the Central Government and other applicable Indian laws.',
+ 'statutory_obligation','Where personal data is transferred outside India or accessed from abroad.',
+ NULL,'https://www.meity.gov.in/','2023-08-11',NULL,'pending_commencement_notification',true,
+ 'Check current government notifications and sector-specific laws.')
+ON CONFLICT (requirement_id) DO NOTHING;
+
+INSERT INTO schema_migrations(version_id,script_name,notes)
+VALUES ('2026.11.V3_CATALOGUE','03_seed_dpdp_catalogue.sql','Inserted starter catalogue rows without overwriting existing entries.')
+ON CONFLICT (version_id) DO NOTHING;
+COMMIT;

@@ -1,0 +1,202 @@
+A human analyst would normally:
+1. Read the entire agreement.
+2. Identify the companies and their responsibilities.
+3. Identify what personal data is processed.
+4. Identify why it is processed.
+5. Identify where the data goes.
+6. Understand the security arrangements.
+7. Check which DPDP requirements are relevant.
+8. Identify missing information.
+9. Prepare a report for a senior reviewer.
+
+
+A0 — Orchestrator / Planner
+Planning
+This agent acts like a project manager.
+
+It looks at:
+- Document name.
+- Document type.
+- Available evidence.
+- Document characteristics.
+- What analysis is required.
+For example, it sees DPDP_Synthetic_DPA_Test.pdf and determines that it is a Data Processing Agreement.
+
+It creates an execution plan for the other agents.
+
+It does not produce the final compliance report.
+A1 — Document Intelligence
+Understanding the document
+This agent understands what the document actually says.
+
+For your sample agreement, it should identify:
+- Parties involved.
+- Data Fiduciary.
+- Data Processor.
+- Purpose of the agreement.
+- Contractual responsibilities.
+- Security clauses.
+- Retention and deletion clauses.
+- Missing information.
+Example:
+
+Original text:
+The processor shall not appoint a sub-processor without prior written authorisation from the fiduciary.
+
+AI interpretation:
+The agreement requires the Data Processor to obtain written approval from the Data Fiduciary before engaging any additional third-party processor.
+
+Notice what happened?
+
+The AI didn't simply copy the sentence. It converted legal language into understandable business language without changing its meaning.
+
+This is one of the important things your project is supposed to accomplish.
+A2 — Personal Data Inventory
+Identifying personal data
+This agent identifies what personal data is involved.
+
+From your sample PDF, it can identify:
+Data category	Example
+Customer identifiers	Account IDs
+Identity information	Names
+Contact information	Email addresses
+Communication data	Support messages
+Transaction references	Order references
+Usage information	Service logs
+
+It also identifies the category of individuals whose data is involved.
+
+For example:
+- Customers.
+- Employees.
+- Vendors.
+- Other individuals, if mentioned.
+This information becomes your Personal Data Inventory.
+A3 — Processing Activities / RoPA
+Understanding why data is processed
+RoPA means Records of Processing Activities.
+
+This is one of the most valuable outputs of your project.
+
+It identifies what an organization does with personal data.
+
+From your PDF, we already have four explicit processing activities:
+Activity	Purpose	System
+Account administration	Maintain accounts	Cloud database
+Customer support	Resolve support requests	Support platform
+Service monitoring	Detect errors	Monitoring service
+Backups	Restore services	Backup storage
+
+The AI should expand these into structured processing records.
+
+For example:
+
+Business process: Customer Support
+
+Processing purpose: Receiving, routing and resolving customer support requests.
+
+Personal data: Names, email addresses, support-message contents and order references.
+
+Processor: Example Cloud Services Pvt. Ltd.
+
+System: Example Support Platform.
+
+Retention: Not precisely specified.
+
+Verification: Pending human review.
+
+This is what your project should ultimately generate in its RoPA register.
+A4 — Data Flow Analysis
+Understanding where data travels
+This agent identifies entities and relationships between them.
+
+For example:
+Illustrative data flow from your sample agreement
+Customer
+
+Provides personal information
+
+Customer support request
+Example Retail Technologies
+
+Data Fiduciary
+
+Contracted processing
+Example Cloud Services
+
+Data Processor
+
+Data stored and processed
+Application / Support / Monitoring / Backup Systems
+
+
+This is a conceptual illustration, not a verified complete architecture of the fictional companies.
+
+The actual Agent 4 generates structured entities and data flows. Another node converts that information into Mermaid diagram syntax.
+
+FastAPI can render the diagrams into SVG and PNG.
+
+This is how your DFD (Data Flow Diagram) is produced.
+A5 — DPDP Compliance Mapping
+Compliance assessment
+This agent compares the extracted information with the DPDP requirements catalogue.
+
+For example:
+
+Your document states:
+The processor shall retain personal data only for the duration needed to provide the service.
+
+But it does not specify an exact number of days or months.
+
+The agent should identify:
+- What requirement is relevant.
+- What evidence exists.
+- What information is missing.
+- Whether the finding is evidenced, partially evidenced or requires verification.
+- What action is recommended.
+Example:
+Field	Result
+Requirement	Retention and deletion
+Evidence	Contract section 7
+Status	Requires verification
+Gap	No exact retention period
+Recommendation	Define a retention schedule and deletion timeline
+
+Important: a missing detail in the agreement does not automatically prove that the organization violates the law. It may simply mean the available document does not establish that the requirement is fulfilled.
+A6 — Risk and Gap Analysis
+Identifying problems
+This agent takes the previous analysis and identifies risks.
+
+Your sample agreement deliberately leaves four points unclear:
+1. No precise retention period.
+2. No actual hosting regions.
+3. No detailed sub-processor register.
+4. No measurable incident-notification deadline.
+These are exactly the kinds of gaps the system should identify.
+
+A possible recommendation:
+Establish a documented retention schedule specifying the applicable retention period for each personal data category. Define deletion procedures and maintain deletion evidence.
+
+It can also suggest:
+- Priority.
+- Responsible department.
+- Suggested remediation timeline.
+- Risk rating.
+- Supporting evidence.
+A7 — Quality Assurance
+Quality control
+This agent acts like a senior reviewer checking the other AI agents.
+
+It should check:
+- Are all required fields present?
+- Do evidence IDs actually exist?
+- Are the compliance mappings valid?
+- Are findings supported by the source document?
+- Are there contradictions?
+- Are any conclusions invented?
+- Are important gaps missing?
+If it identifies problems, your workflow can request corrections from the relevant agent.
+
+Your JSON contains a maximum of two automated QA revision cycles.
+
+This is important because AI can make mistakes even when its initial answer looks convincing.
