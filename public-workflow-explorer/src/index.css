@@ -7,6 +7,8 @@
 @import "tailwindcss";
 @import "@xyflow/react/dist/style.css";
 
+@variant dark (&:where(.dark, .dark *));
+
 :root {
   --font-sans:
     system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
@@ -34,7 +36,8 @@ body {
     color 0.2s ease;
 }
 
-.dark body {
+.dark body,
+html.dark body {
   background-color: #080c14;
   color: #f1f5f9;
 }

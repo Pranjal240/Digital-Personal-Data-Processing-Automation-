@@ -292,6 +292,11 @@ export function useWorkflowGraph() {
     return selectedNodeId ? idToNode.get(selectedNodeId) || null : null
   }, [selectedNodeId, idToNode])
 
+  const changeLayoutMode = useCallback((mode: LayoutMode) => {
+    setCustomPositions(new Map())
+    setLayoutMode(mode)
+  }, [])
+
   return {
     nodes: processedGraph.nodes,
     edges: processedGraph.edges,
@@ -308,7 +313,7 @@ export function useWorkflowGraph() {
     activeCategory,
     setActiveCategory,
     layoutMode,
-    setLayoutMode,
+    setLayoutMode: changeLayoutMode,
     idToNode,
     totalNodes: workflowData.nodes.length,
   }

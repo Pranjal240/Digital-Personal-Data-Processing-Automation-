@@ -4,7 +4,7 @@
  * Licensed under the MIT License.
  */
 
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useCallback } from 'react'
 import {
   ReactFlow,
   Background,
@@ -71,15 +71,35 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
   const [showMinimap, setShowMinimap] = useState(false)
   const isInitialFit = useRef(false)
 
-  // Initial fit view on mount
+  // Initial camera focus on mount: directly center on Row 01 (Intake & Security) at clear zoom 0.85
   useEffect(() => {
     if (!isInitialFit.current && nodes.length > 0) {
-      setTimeout(() => {
-        fitView({ padding: 0.15, duration: 600 })
+      const timer = setTimeout(() => {
+        // Focus on Row 01 nodes
+        const row1Nodes = nodes.filter(
+          (n) => (n.data?.raw as any)?._meta?.stage?.id === 'stage-01' && n.type !== 'stickyGroup'
+        )
+        if (row1Nodes.length > 0) {
+          let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity
+          row1Nodes.forEach((n) => {
+            const w = (n.data?.width as number) || 280
+            const h = (n.data?.height as number) || 120
+            minX = Math.min(minX, n.position.x)
+            maxX = Math.max(maxX, n.position.x + w)
+            minY = Math.min(minY, n.position.y)
+            maxY = Math.max(maxY, n.position.y + h)
+          })
+          const centerX = minX + (maxX - minX) / 2
+          const centerY = minY + (maxY - minY) / 2
+          setCenter(centerX, centerY, { zoom: 0.85, duration: 500 })
+        } else {
+          setCenter(200, 200, { zoom: 0.85, duration: 500 })
+        }
         isInitialFit.current = true
       }, 100)
+      return () => clearTimeout(timer)
     }
-  }, [nodes, fitView])
+  }, [nodes, setCenter])
 
   // Center on selected node when clicked from search or agent list
   useEffect(() => {
@@ -124,6 +144,26 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
     }
   }, [activeStageId, nodes, setCenter])
 
+  // When layout mode changes (Dagre Flow vs Stage Rows), re-align camera
+  const handleChangeLayoutMode = useCallback((mode: LayoutMode) => {
+    onChangeLayoutMode(mode)
+    setTimeout(() => {
+      if (mode === 'horizontal') {
+        fitView({ padding: 0.2, duration: 600 })
+      } else {
+        setCenter(200, 200, { zoom: 0.85, duration: 600 })
+      }
+    }, 80)
+  }, [onChangeLayoutMode, fitView, setCenter])
+
+  // Reset design layout and re-center on Row 01
+  const handleResetLayout = useCallback(() => {
+    onResetLayout()
+    setTimeout(() => {
+      setCenter(200, 200, { zoom: 0.85, duration: 600 })
+    }, 80)
+  }, [onResetLayout, setCenter])
+
   const handleNodeClick: NodeMouseHandler = (_, node) => {
     if (node.type !== 'stickyGroup') {
       onSelectNode(node.id)
@@ -151,7 +191,7 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
   }
 
   return (
-    <div className="relative w-full h-full bg-slate-50 dark:bg-[#080c14] overflow-hidden select-none transition-colors">
+    <div className={`relative w-full h-full select-none transition-colors overflow-hidden ${theme === 'dark' ? 'bg-[#080c14]' : 'bg-[#f1f5f9]'}`}>
       <ReactFlow
         nodes={nodes}
         edges={edges}
@@ -163,9 +203,9 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
         nodesDraggable={true}
         nodesConnectable={false}
         elementsSelectable={true}
+        defaultViewport={{ x: 200, y: 150, zoom: 0.85 }}
         minZoom={0.05}
         maxZoom={2.5}
-        fitViewOptions={{ padding: 0.15 }}
         defaultEdgeOptions={{
           type: 'custom',
           animated: true,
@@ -175,7 +215,7 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
           variant={BackgroundVariant.Dots}
           gap={24}
           size={1.5}
-          color={theme === 'dark' ? '#334155' : '#cbd5e1'}
+          color={theme === 'dark' ? '#334155' : '#94a3b8'}
           className="opacity-70"
         />
 
@@ -184,7 +224,7 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
             nodeColor={minimapNodeColor}
             nodeStrokeWidth={2}
             nodeBorderRadius={4}
-            maskColor={theme === 'dark' ? 'rgba(8, 12, 20, 0.75)' : 'rgba(248, 250, 252, 0.75)'}
+            maskColor={theme === 'dark' ? 'rgba(8, 12, 20, 0.75)' : 'rgba(241, 245, 249, 0.75)'}
             position="bottom-right"
             style={{
               backgroundColor: theme === 'dark' ? '#0f172a' : '#ffffff',
@@ -200,12 +240,9 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
         onZoomIn={() => zoomIn({ duration: 300 })}
         onZoomOut={() => zoomOut({ duration: 300 })}
         onFitView={() => fitView({ padding: 0.15, duration: 600 })}
-        onResetLayout={() => {
-          onResetLayout()
-          setTimeout(() => fitView({ padding: 0.15, duration: 600 }), 50)
-        }}
+        onResetLayout={handleResetLayout}
         layoutMode={layoutMode}
-        onChangeLayoutMode={onChangeLayoutMode}
+        onChangeLayoutMode={handleChangeLayoutMode}
         showMinimap={showMinimap}
         onToggleMinimap={() => setShowMinimap(!showMinimap)}
         totalNodesCount={totalNodesCount}
