@@ -32,11 +32,11 @@ export const FlowButton: React.FC<FlowButtonProps> = ({
 }) => {
   const content = text || children
 
-  // Size configurations
+  // Size configurations with ample right padding so text never collides with arrow icon
   const sizeClasses = {
-    sm: 'px-4 py-1.5 text-xs rounded-[100px]',
-    md: 'px-6 py-2 text-xs sm:text-sm rounded-[100px]',
-    lg: 'px-8 py-3 text-sm rounded-[100px]',
+    sm: 'pl-3.5 sm:pl-4 pr-7 sm:pr-8 py-1.5 text-xs rounded-[100px]',
+    md: 'pl-4 sm:pl-6 pr-8 sm:pr-10 py-2 text-xs sm:text-sm rounded-[100px]',
+    lg: 'pl-6 sm:pl-8 pr-10 sm:pr-12 py-3 text-sm rounded-[100px]',
   }
 
   // Variant color definitions (adapted for day & night mode)

@@ -114,32 +114,32 @@ export const NodeDetailsDrawer: React.FC<NodeDetailsDrawerProps> = ({
   return (
     <div className="fixed inset-y-0 right-0 w-full sm:w-[540px] bg-white/98 dark:bg-slate-900/98 border-l border-slate-200 dark:border-slate-800 z-50 flex flex-col backdrop-blur-xl shadow-2xl transition-all duration-300">
       {/* Top Header */}
-      <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-950/70">
-        <div className="flex items-center gap-2.5 overflow-hidden">
-          <div className="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20 shrink-0">
-            {isAgent ? <Bot className="w-5 h-5" /> : <Info className="w-5 h-5" />}
+      <div className="p-3 sm:p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-50 dark:bg-slate-950/70 shrink-0">
+        <div className="flex items-center gap-2.5 overflow-hidden min-w-0">
+          <div className="p-1.5 sm:p-2 rounded-lg bg-indigo-50 dark:bg-indigo-500/10 text-indigo-600 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20 shrink-0">
+            {isAgent ? <Bot className="w-4 h-4 sm:w-5 sm:h-5" /> : <Info className="w-4 h-4 sm:w-5 sm:h-5" />}
           </div>
-          <div className="truncate">
+          <div className="truncate min-w-0">
             <div className="flex items-center gap-1.5">
-              <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-semibold">
+              <span className="text-[10px] font-mono uppercase px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border border-slate-300 dark:border-slate-700 font-semibold shrink-0">
                 {node._meta.category.toUpperCase()}
               </span>
               {node._meta.agentId && (
-                <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30">
+                <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30 shrink-0">
                   {node._meta.agentId}
                 </span>
               )}
             </div>
-            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 truncate mt-1" title={node.name}>
+            <h3 className="text-xs sm:text-sm font-bold text-slate-900 dark:text-slate-100 truncate mt-0.5" title={node.name}>
               {node.name}
             </h3>
           </div>
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1 shrink-0 ml-2">
           <button
             onClick={onClose}
-            className="p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800 transition"
+            className="p-1.5 sm:p-2 rounded-lg text-slate-500 hover:text-slate-900 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-white dark:hover:bg-slate-800 transition"
             title="Close Details Panel"
           >
             <X className="w-5 h-5" />
@@ -148,46 +148,48 @@ export const NodeDetailsDrawer: React.FC<NodeDetailsDrawerProps> = ({
       </div>
 
       {/* Tabs Bar */}
-      <div className="flex items-center border-b border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/40 px-3 pt-1 text-xs font-medium">
+      <div className="flex items-center overflow-x-auto no-scrollbar whitespace-nowrap border-b border-slate-200 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/40 px-2 sm:px-3 pt-1 text-xs font-medium shrink-0">
         <button
           onClick={() => setActiveTab('overview')}
-          className={`px-3 py-2 border-b-2 transition flex items-center gap-1.5 ${
+          className={`px-2.5 sm:px-3 py-2 border-b-2 transition flex items-center gap-1.5 shrink-0 ${
             activeTab === 'overview'
               ? 'border-indigo-600 dark:border-indigo-500 text-indigo-600 dark:text-indigo-400 font-semibold'
               : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
           }`}
         >
-          <Info className="w-3.5 h-3.5" />
+          <Info className="w-3.5 h-3.5 shrink-0" />
           <span>Overview</span>
         </button>
 
         <button
           onClick={() => setActiveTab('params')}
-          className={`px-3 py-2 border-b-2 transition flex items-center gap-1.5 ${
+          className={`px-2.5 sm:px-3 py-2 border-b-2 transition flex items-center gap-1.5 shrink-0 ${
             activeTab === 'params'
               ? 'border-indigo-600 dark:border-indigo-500 text-indigo-600 dark:text-indigo-400 font-semibold'
               : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
           }`}
         >
-          <Terminal className="w-3.5 h-3.5" />
-          <span>Node Logic & Config</span>
+          <Terminal className="w-3.5 h-3.5 shrink-0" />
+          <span className="hidden sm:inline">Node Logic & Config</span>
+          <span className="inline sm:hidden">Logic & Code</span>
         </button>
 
         <button
           onClick={() => setActiveTab('json')}
-          className={`px-3 py-2 border-b-2 transition flex items-center gap-1.5 ${
+          className={`px-2.5 sm:px-3 py-2 border-b-2 transition flex items-center gap-1.5 shrink-0 ${
             activeTab === 'json'
               ? 'border-indigo-600 dark:border-indigo-500 text-indigo-600 dark:text-indigo-400 font-semibold'
               : 'border-transparent text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200'
           }`}
         >
-          <Code className="w-3.5 h-3.5" />
-          <span>Sanitized JSON</span>
+          <Code className="w-3.5 h-3.5 shrink-0" />
+          <span className="hidden sm:inline">Sanitized JSON</span>
+          <span className="inline sm:hidden">JSON</span>
         </button>
       </div>
 
       {/* Scrollable Content Body */}
-      <div className="flex-1 overflow-y-auto p-5 space-y-6 text-sm">
+      <div className="flex-1 overflow-y-auto p-3.5 sm:p-5 space-y-4 sm:space-y-6 text-xs sm:text-sm">
         {activeTab === 'overview' && (
           <>
             {/* Stage & Pipeline Row */}

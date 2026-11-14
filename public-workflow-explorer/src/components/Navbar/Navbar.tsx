@@ -51,32 +51,32 @@ export const Navbar: React.FC<NavbarProps> = ({
   onDownloadWorkflow,
 }) => {
   return (
-    <header className="h-14 bg-white/95 dark:bg-slate-900/95 border-b border-slate-200 dark:border-slate-800 px-3 sm:px-4 flex items-center justify-between select-none z-50 backdrop-blur-md sticky top-0 transition-colors">
+    <header className="h-14 bg-white/95 dark:bg-slate-900/95 border-b border-slate-200 dark:border-slate-800 px-2.5 sm:px-4 flex items-center justify-between select-none z-50 backdrop-blur-md sticky top-0 transition-colors">
       {/* Left Branding & Mobile Trigger */}
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
         <button
           onClick={onToggleSidebar}
-          className="p-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition md:hidden"
+          className="p-1.5 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition md:hidden shrink-0"
           title="Toggle Navigation Index"
         >
           <Menu className="w-5 h-5" />
         </button>
 
-        {/* Clean Engineering Node Glyph (No generic shield) */}
-        <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-mono font-bold text-xs shadow-sm">
+        {/* Clean Engineering Node Glyph */}
+        <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-mono font-bold text-xs shadow-sm shrink-0">
             <Workflow className="w-4 h-4" />
           </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="font-bold text-sm text-slate-900 dark:text-slate-100 tracking-tight">
+          <div className="min-w-0">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <span className="font-bold text-xs sm:text-sm text-slate-900 dark:text-slate-100 tracking-tight whitespace-nowrap">
                 DPDP Automation
               </span>
-              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30 font-semibold">
+              <span className="text-[9px] sm:text-[10px] font-mono px-1 sm:px-1.5 py-0.2 rounded bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30 font-semibold shrink-0">
                 Explorer
               </span>
             </div>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 hidden sm:block">
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 hidden md:block truncate">
               Interactive n8n Architecture Viewer
             </p>
           </div>
@@ -84,12 +84,12 @@ export const Navbar: React.FC<NavbarProps> = ({
       </div>
 
       {/* Center Nav Links with FlowButton styling */}
-      <nav className="hidden lg:flex items-center gap-1.5 bg-slate-100 dark:bg-slate-950/70 p-1 rounded-full border border-slate-200 dark:border-slate-800">
+      <nav className="hidden lg:flex items-center gap-1.5 bg-slate-100 dark:bg-slate-950/70 p-1 rounded-full border border-slate-200 dark:border-slate-800 shrink-0">
         <FlowButton
           size="sm"
           variant="subtle"
           onClick={onOpenOverview}
-          className="border-transparent hover:border-transparent text-slate-700 dark:text-slate-200 !py-1 !px-4"
+          className="border-transparent hover:border-transparent text-slate-700 dark:text-slate-200 !py-1 !px-3"
         >
           <Info className="w-3.5 h-3.5 mr-1 text-indigo-600 dark:text-indigo-400" />
           <span>Overview</span>
@@ -99,7 +99,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           size="sm"
           variant="accent"
           onClick={onOpenAgentExplorer}
-          className="border-transparent hover:border-transparent !py-1 !px-4"
+          className="border-transparent hover:border-transparent !py-1 !px-3"
         >
           <Bot className="w-3.5 h-3.5 mr-1 text-cyan-600 dark:text-cyan-400" />
           <span>A0–A8 Agents</span>
@@ -109,7 +109,7 @@ export const Navbar: React.FC<NavbarProps> = ({
           size="sm"
           variant="subtle"
           onClick={onOpenTechStack}
-          className="border-transparent hover:border-transparent text-slate-700 dark:text-slate-200 !py-1 !px-4"
+          className="border-transparent hover:border-transparent text-slate-700 dark:text-slate-200 !py-1 !px-3"
         >
           <Cpu className="w-3.5 h-3.5 mr-1 text-amber-600 dark:text-amber-400" />
           <span>Tech Stack</span>
@@ -117,7 +117,7 @@ export const Navbar: React.FC<NavbarProps> = ({
       </nav>
 
       {/* Right Controls */}
-      <div className="flex items-center gap-1.5 sm:gap-2">
+      <div className="flex items-center gap-1 sm:gap-2 shrink-0">
         {/* Interactive View-Only Notice Pill */}
         <div className="hidden xl:flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-100 dark:bg-slate-800/80 text-[11px] text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700">
           <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
@@ -142,18 +142,18 @@ export const Navbar: React.FC<NavbarProps> = ({
           href="https://github.com/Pranjal240/Digital-Personal-Data-Processing-Automation-"
           target="_blank"
           rel="noreferrer"
-          className="hidden sm:inline-flex"
+          className="hidden md:inline-flex"
         >
           <GithubIcon className="w-3.5 h-3.5 mr-1" />
           <span>GitHub</span>
         </FlowButton>
 
-        <div className="w-[1px] h-5 bg-slate-200 dark:bg-slate-800 mx-0.5" />
+        <div className="hidden sm:block w-[1px] h-5 bg-slate-200 dark:bg-slate-800 mx-0.5" />
 
         {/* Fullscreen Toggle */}
         <button
           onClick={onToggleFullscreen}
-          className="p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+          className="p-1.5 sm:p-2 rounded-lg text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition"
           title={isFullscreen ? 'Exit Fullscreen' : 'Enter Fullscreen'}
         >
           {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
@@ -162,7 +162,7 @@ export const Navbar: React.FC<NavbarProps> = ({
         {/* Day / Night Theme Switcher Pill */}
         <button
           onClick={onToggleTheme}
-          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-semibold transition-all shadow-xs cursor-pointer ${
+          className={`flex items-center gap-1.5 p-1.5 sm:px-3 sm:py-1.5 rounded-full border text-xs font-semibold transition-all shadow-xs cursor-pointer ${
             theme === 'dark'
               ? 'bg-slate-800 border-slate-700 text-amber-300 hover:bg-slate-700 hover:text-amber-200'
               : 'bg-white border-slate-300 text-slate-800 hover:bg-slate-100 shadow-sm'
@@ -172,12 +172,12 @@ export const Navbar: React.FC<NavbarProps> = ({
           {theme === 'dark' ? (
             <>
               <Moon className="w-3.5 h-3.5 text-amber-400" />
-              <span>Night Mode</span>
+              <span className="hidden sm:inline">Night Mode</span>
             </>
           ) : (
             <>
               <Sun className="w-3.5 h-3.5 text-amber-500" />
-              <span>Day Mode</span>
+              <span className="hidden sm:inline">Day Mode</span>
             </>
           )}
         </button>

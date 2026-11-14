@@ -77,6 +77,10 @@ interface FramerSidebarProps {
   selectedAgentId: string | null
   isMobileOpen?: boolean
   onToggleMobileOpen?: () => void
+  onOpenOverview?: () => void
+  onOpenTechStack?: () => void
+  onOpenAgentExplorer?: () => void
+  onDownloadWorkflow?: () => void
 }
 
 export const FramerSidebar: React.FC<FramerSidebarProps> = ({
@@ -92,6 +96,10 @@ export const FramerSidebar: React.FC<FramerSidebarProps> = ({
   selectedAgentId,
   isMobileOpen,
   onToggleMobileOpen,
+  onOpenOverview,
+  onOpenTechStack,
+  onOpenAgentExplorer,
+  onDownloadWorkflow,
 }) => {
   const [internalOpen, setInternalOpen] = useState(false)
   const [isPinned, setIsPinned] = useState(false)
@@ -381,15 +389,15 @@ export const FramerSidebar: React.FC<FramerSidebarProps> = ({
               animate={{ x: 0, opacity: 1 }}
               exit={{ x: '-100%', opacity: 0 }}
               transition={{ duration: 0.25, ease: 'easeInOut' }}
-              className="fixed inset-0 z-50 bg-white dark:bg-neutral-900 p-6 flex flex-col justify-between overflow-y-auto"
+              className="fixed inset-0 z-50 bg-white dark:bg-neutral-900 p-4 sm:p-6 flex flex-col justify-between overflow-y-auto"
             >
-              <div className="flex items-center justify-between pb-4 border-b border-slate-200 dark:border-neutral-800">
+              <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-neutral-800 shrink-0">
                 <div className="flex items-center gap-2">
                   <div className="w-7 h-7 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-mono font-bold text-xs">
                     DP
                   </div>
                   <span className="font-bold text-sm text-slate-900 dark:text-neutral-100">
-                    Workflow Index
+                    Workflow Index & Tools
                   </span>
                 </div>
                 <button
@@ -400,8 +408,72 @@ export const FramerSidebar: React.FC<FramerSidebarProps> = ({
                 </button>
               </div>
 
+              {/* Mobile Quick Action Pills */}
+              <div className="grid grid-cols-2 gap-2 pt-3 pb-1 shrink-0">
+                {onOpenOverview && (
+                  <button
+                    onClick={() => {
+                      setOpen(false)
+                      onOpenOverview()
+                    }}
+                    className="flex items-center gap-2 p-2 rounded-lg border border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-neutral-800 text-xs text-slate-700 dark:text-neutral-200 font-medium hover:border-indigo-400"
+                  >
+                    <Layers className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
+                    <span>System Overview</span>
+                  </button>
+                )}
+                {onOpenAgentExplorer && (
+                  <button
+                    onClick={() => {
+                      setOpen(false)
+                      onOpenAgentExplorer()
+                    }}
+                    className="flex items-center gap-2 p-2 rounded-lg border border-indigo-200 dark:border-indigo-500/30 bg-indigo-50/50 dark:bg-indigo-950/30 text-xs text-indigo-700 dark:text-indigo-300 font-medium"
+                  >
+                    <Bot className="w-3.5 h-3.5 text-indigo-600 dark:text-indigo-400 shrink-0" />
+                    <span>A0–A8 Agents</span>
+                  </button>
+                )}
+                {onOpenTechStack && (
+                  <button
+                    onClick={() => {
+                      setOpen(false)
+                      onOpenTechStack()
+                    }}
+                    className="flex items-center gap-2 p-2 rounded-lg border border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-neutral-800 text-xs text-slate-700 dark:text-neutral-200 font-medium hover:border-amber-400"
+                  >
+                    <Cpu className="w-3.5 h-3.5 text-amber-600 dark:text-amber-400 shrink-0" />
+                    <span>Tech Stack</span>
+                  </button>
+                )}
+                {onDownloadWorkflow && (
+                  <button
+                    onClick={() => {
+                      setOpen(false)
+                      onDownloadWorkflow()
+                    }}
+                    className="flex items-center gap-2 p-2 rounded-lg border border-slate-200 dark:border-neutral-800 bg-slate-50 dark:bg-neutral-800 text-xs text-slate-700 dark:text-neutral-200 font-medium hover:border-emerald-400"
+                  >
+                    <FileText className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    <span>Export JSON</span>
+                  </button>
+                )}
+              </div>
+
+              {/* Mobile Search Bar */}
+              <div className="relative pt-2 pb-1 shrink-0">
+                <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400 dark:text-neutral-500" />
+                <input
+                  type="text"
+                  placeholder="Search nodes, tools, prompts..."
+                  value={searchQuery}
+                  onChange={(e) => onSearchChange(e.target.value)}
+                  className="w-full pl-8 pr-3 py-1.5 rounded-lg border border-slate-200 dark:border-neutral-700 bg-slate-50 dark:bg-neutral-800 text-xs text-slate-800 dark:text-neutral-200 placeholder-slate-400 focus:outline-none focus:ring-1 focus:ring-indigo-500"
+                />
+              </div>
+
               {/* Mobile Content */}
-              <div className="flex-1 py-4 space-y-5 overflow-y-auto">
+              <div className="flex-1 py-3 space-y-4 overflow-y-auto">
                 <div className="space-y-1">
                   <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Categories</span>
                   {categoryFilters.map((cat) => (
@@ -436,10 +508,15 @@ export const FramerSidebar: React.FC<FramerSidebarProps> = ({
                         onFocusAgent(ag.id)
                         setOpen(false)
                       }}
-                      className="w-full text-left p-2 rounded-lg border border-slate-200 dark:border-neutral-800 text-xs flex items-center justify-between"
+                      className="w-full text-left p-2 rounded-lg border border-slate-200 dark:border-neutral-800 text-xs flex items-center justify-between gap-2 hover:bg-slate-50 dark:hover:bg-neutral-800/50"
                     >
-                      <span className="font-bold">{ag.id}: {ag.name}</span>
-                      <span className="text-[10px] text-slate-400">{ag.stageId}</span>
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30 shrink-0">
+                          {ag.id}
+                        </span>
+                        <span className="font-semibold text-slate-900 dark:text-neutral-100 truncate">{ag.name}</span>
+                      </div>
+                      <span className="text-[10px] font-mono text-slate-400 shrink-0 ml-1">{ag.stageId.replace('stage-', 'Row ')}</span>
                     </button>
                   ))}
                 </div>

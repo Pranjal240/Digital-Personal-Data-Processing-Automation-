@@ -197,7 +197,7 @@ export const WorkflowCanvas: React.FC<WorkflowCanvasProps> = ({
               backgroundColor: theme === 'dark' ? '#0f172a' : '#ffffff',
               border: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid #cbd5e1',
             }}
-            className="!bottom-6 !right-6 !m-0 !w-56 !h-36 !rounded-xl !shadow-xl"
+            className="!bottom-16 sm:!bottom-6 !right-3 sm:!right-6 !m-0 !w-36 !h-24 sm:!w-56 sm:!h-36 !rounded-xl !shadow-xl"
           />
         )}
       </ReactFlow>

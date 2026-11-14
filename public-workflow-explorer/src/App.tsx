@@ -184,35 +184,42 @@ function WorkflowExplorerApp() {
           selectedAgentId={selectedAgentId}
           isMobileOpen={isMobileSidebarOpen}
           onToggleMobileOpen={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+          onOpenOverview={() => setIsOverviewOpen(true)}
+          onOpenTechStack={() => setIsTechStackOpen(true)}
+          onOpenAgentExplorer={() => setIsAgentExplorerOpen(true)}
+          onDownloadWorkflow={handleDownloadWorkflow}
         />
 
         {/* Center Interactive Graph Canvas */}
         <main className="flex-1 h-full ml-0 md:ml-16 relative flex flex-col transition-all duration-300">
           {/* Interactive Disclaimer Banner */}
           {showBanner && (
-            <div className="relative z-20 mx-3 sm:mx-6 mt-3 px-4 py-2.5 rounded-xl border border-indigo-200/80 dark:border-indigo-500/30 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
-              <div className="flex items-center gap-2.5">
-                <div className="p-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 shrink-0">
+            <div className="relative z-20 mx-2 sm:mx-6 mt-2 sm:mt-3 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl border border-indigo-200/80 dark:border-indigo-500/30 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2.5 sm:gap-3 text-xs">
+              <div className="flex items-center gap-2 sm:gap-2.5 min-w-0">
+                <div className="p-1 sm:p-1.5 rounded-lg bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 shrink-0">
                   <Info className="w-4 h-4" />
                 </div>
-                <p className="text-slate-700 dark:text-slate-300 leading-relaxed font-normal">
-                  <strong className="font-semibold text-slate-900 dark:text-slate-100">Interactive Architecture Explorer:</strong> This is a public, read-only interactive viewer for exploring the DPDP multi-agent n8n workflow. Running the live production automation requires the backend setup and environment installation, which is free and open-source on GitHub.
+                <p className="text-slate-700 dark:text-slate-300 leading-snug font-normal text-[11px] sm:text-xs min-w-0">
+                  <strong className="font-semibold text-slate-900 dark:text-slate-100">Interactive Architecture Explorer:</strong>{' '}
+                  <span className="hidden sm:inline">This is a public, read-only interactive viewer for exploring the DPDP multi-agent n8n workflow. Live production setup is free and open-source on GitHub.</span>
+                  <span className="inline sm:hidden">Public read-only architecture viewer. Live setup is open-source on GitHub.</span>
                 </p>
               </div>
 
               <div className="flex items-center gap-2 shrink-0 self-end sm:self-auto">
                 <FlowButton
-                  text="Get Backend Setup"
+                  text="Backend Setup"
                   icon={GitFork}
                   size="sm"
                   variant="accent"
                   href="https://github.com/Pranjal240/Digital-Personal-Data-Processing-Automation-"
                   target="_blank"
                   rel="noreferrer"
+                  className="!py-1 !text-[11px] sm:!text-xs"
                 />
                 <button
                   onClick={() => setShowBanner(false)}
-                  className="p-1 rounded-md text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+                  className="p-1 rounded-md text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition shrink-0"
                   title="Dismiss Notice"
                 >
                   <X className="w-4 h-4" />

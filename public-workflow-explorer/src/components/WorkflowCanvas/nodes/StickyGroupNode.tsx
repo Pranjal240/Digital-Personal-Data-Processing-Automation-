@@ -19,8 +19,8 @@ interface StickyGroupNodeProps {
 export const StickyGroupNode: React.FC<StickyGroupNodeProps> = ({ data }) => {
   const { raw } = data
   const params = raw.parameters || {}
-  const width = params.width || 2400
-  const height = params.height || 500
+  const width = data.width || params.width || 2400
+  const height = data.height || params.height || 500
   const content = params.content || ''
   const isMaster = raw.name.includes('Master Overview')
 
@@ -39,12 +39,12 @@ export const StickyGroupNode: React.FC<StickyGroupNodeProps> = ({ data }) => {
     >
       {/* Top stage header */}
       <div className="flex items-center justify-between border-b border-slate-200/80 dark:border-slate-800/60 pb-3">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20">
+        <div className="flex items-center gap-3 overflow-hidden">
+          <div className="p-2 rounded-lg bg-indigo-100 dark:bg-indigo-500/10 text-indigo-700 dark:text-indigo-400 border border-indigo-200 dark:border-indigo-500/20 shrink-0">
             {isMaster ? <Cpu className="w-5 h-5" /> : <Bookmark className="w-5 h-5" />}
           </div>
-          <div>
-            <h3 className="text-lg font-bold text-slate-800 dark:text-slate-200 tracking-tight flex items-center gap-2">
+          <div className="overflow-hidden">
+            <h3 className="text-base sm:text-lg font-bold text-slate-800 dark:text-slate-200 tracking-tight flex items-center gap-2 flex-wrap">
               <span>{title}</span>
               <span className="text-xs px-2 py-0.5 rounded-full bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-400 font-mono border border-slate-200 dark:border-slate-700 font-medium">
                 {raw.name}
@@ -58,9 +58,9 @@ export const StickyGroupNode: React.FC<StickyGroupNodeProps> = ({ data }) => {
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-500 font-mono">
+        <div className="flex items-center gap-1.5 text-xs text-slate-500 dark:text-slate-500 font-mono shrink-0 ml-3">
           <Layers className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-          <span>{isMaster ? 'Production System' : 'Stage Boundary'}</span>
+          <span className="hidden sm:inline">{isMaster ? 'Production System' : 'Stage Boundary'}</span>
         </div>
       </div>
 
